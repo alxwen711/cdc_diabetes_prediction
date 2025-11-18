@@ -1,11 +1,10 @@
-name: tree_predict
+name: vancouver_tree_predictions
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - jupyterlab
-  - scikit-learn=1.7
-  - python=3.12
+  - jupyterlab=4.5.0
+  - scikit-learn=1.7.2
+  - python=3.12.12
   - pandas=2.3.3
-  - numpy=2.3
-prefix: /Users/raymondwang/miniforge3/envs/tree_predict
+  - numpy=2.3.5
