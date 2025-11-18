@@ -1,0 +1,11 @@
+name: tree_predict
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - jupyterlab
+  - scikit-learn=1.7
+  - python=3.12
+  - pandas=2.3.3
+  - numpy=2.3
+prefix: /Users/raymondwang/miniforge3/envs/tree_predict
