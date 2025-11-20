@@ -13,17 +13,17 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: a5d75eb1324eaf35bc739bf31d7940dae59827c36381861b7739320dff6ddd1a
-    osx-arm64: 84774deefd9a2c47bd539357569505398fc64d5e431f911809911fd17ffce58c
-    osx-64: b93021ec83f37ab060bf61e80bdaa0d576ec8433a5795ecc797138b28e2a83ed
-    win-64: 4b2d42385770d59d0a9d094c4ff2b6b2b4520487bf5163db11f077ebd45420c5
+    linux-64: 211f8a7396f31b31caa90a0613b988fb60ae901f7e930b7b78f63b433fc60e6b
+    osx-arm64: 924f62429ec58b794fa1e271b6313758d21d1944f4c73f5da9b8b9048c327307
+    osx-64: 43ad4b2457336c40b3a56e8a48146150cfdaa0444689a2e27276739194fa4808
+    win-64: c67f7af9d4b9b0cd7a739b8e83d0a03f9a97f2d1c800f8ae470e42ab5a548a47
   channels:
   - url: conda-forge
     used_env_vars: []
   platforms:
   - linux-64
-  - osx-arm64
   - osx-64
+  - osx-arm64
   - win-64
   sources:
   - environment.yml
