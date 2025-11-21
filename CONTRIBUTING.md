@@ -1,6 +1,6 @@
-# Contributing to the Tree Prediction project
+# Contributing to the CDC Diabetes project
 
-This outlines how to propose a change to the Tree Prediction project.
+This outlines how to propose a change to the CDC Diabetes project.
 
 ## Fixing typos
 

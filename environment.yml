@@ -1,4 +1,4 @@
-name: vancouver_tree_predictions
+name: cdc_diabetes_prediction
 channels:
   - conda-forge
 dependencies:
