@@ -8,7 +8,7 @@ Basic data analysis on predicting the species of a tree in Vancouver following s
 
 Insert a brief synopsis of the project here
 
-The full report of our findings can be found [here (replace this with the actual link once the report is up)](https://github.com/alxwen711/cdc_diabetes_prediction/main/report/cdc_diabetes_prediction_report.ipynb)
+The full report of our findings can be found [here](https://github.com/alxwen711/cdc_diabetes_prediction/main/notebooks/cdc_diabetes_prediction_report.ipynb).
 
 
 ## Dependencies
@@ -42,4 +42,4 @@ Assuming the initial setup is complete, to run the analysis, navigate to `cdc_di
 
 ## [License](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/LICENSE)
 
-The [CDC Diabetes Prediction]((https://github.com/alxwen711/cdc_diabetes_prediction/main/report/cdc_diabetes_prediction_report.ipynb)) report is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Licence](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en) and the software code in this repository is licensed under the [MIT license](https://opensource.org/license/mit) For all usage/remixes of this project pease provide attribution and link to this webpage.
+The [CDC Diabetes Prediction]((https://github.com/alxwen711/cdc_diabetes_prediction/main/notebooks/cdc_diabetes_prediction_report.ipynb)) report is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Licence](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en) and the software code in this repository is licensed under the [MIT license](https://opensource.org/license/mit) For all usage/remixes of this project pease provide attribution and link to this webpage.
