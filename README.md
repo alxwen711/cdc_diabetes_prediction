@@ -2,7 +2,7 @@
 
 **Authors: Michael Eirikson, Raymond Wang, Alexander Wen**
 
-Basic data analysis on predicting the species of a tree in Vancouver following sound data scientific workflows as part of the main project for DSCI 522 (Data Science Workflows), a course in the Master of Data Science program at the University of British Columbia.
+Basic data analysis on predicting diabetes based on health and lifestyle features following sound data scientific workflows as part of the main project for DSCI 522 (Data Science Workflows), a course in the Master of Data Science program at the University of British Columbia.
 
 ## About
 
