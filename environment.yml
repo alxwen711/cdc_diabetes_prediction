@@ -1,6 +1,7 @@
 name: cdc_diabetes_prediction
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - jupyter_contrib_nbextensions=0.7.0
   - altair=5.1.2
