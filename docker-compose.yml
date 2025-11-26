@@ -4,7 +4,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - .:/home/diabetes_prediction
+      - .:/home/jovyan/diabetes_prediction
     deploy:
       resources:
         limits:
