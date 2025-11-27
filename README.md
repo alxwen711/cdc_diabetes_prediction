@@ -41,6 +41,16 @@ To safely close the docker container
 1. In terminal press `Crtl+C`
 2. Once the container has stopped enter this terminal command to remove the container `docker-compose rm` type `y` to confirm
 
+### Known Issues
+
+On some apple silicon machines there is an issue with the kernel in jupyterlabs. The kernel may hang when started or when restarted or if sklearn functions use n_jobs>1.
+
+If these are issues try:
+
+- safely closing the container as described above
+- restart the contrainer as described above
+- don't click on anything except to navigate to the `cdc_diabetes_prediction_report.ipynb` notebook and click Run > Run All Cells
+
 ## References and Acknowledgements
 
 The dataset utilized is the CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). A cleaned version of this dataset has been prepared by Aex Teboul and be accessed through Kaggle under the [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data). Lastly, our project makes use of the `ucimlrepo` library to access the dataset more easily, further documentation for this tool is located at [https://github.com/uci-ml-repo/ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo).
