@@ -15,37 +15,31 @@ The full report of our findings can be found [here](https://github.com/alxwen711
 
 ## Dependencies
 
-The dependencies for this project are everything listed in [environment.yml](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/environment.yml). The environment can be setup from this yml file by using conda (version 25.3.1 or higher) and conda-lock (version 3.0.4).
+- [Docker](https://www.docker.com/)
 
-If conda-lock is not in the environment, run the following command:
-
-```
-conda install conda-lock=3.0.4
-```
-
-## Initial Setup
-
-If this is the first time running this project, run the following from the repository root to setup the virtual environment:
-
-```
-conda-lock install --name cdc_diabetes_prediction conda-lock.yml
-```
+- [Docker image created for this analysis](https://hub.docker.com/r/meirikson/cdc_diabetes_prediction)
 
 ## Usage
 
-Assuming the initial setup is complete, setup the initial environment with the following command.
+### Setup
 
-```
-conda activate cdc_diabetes_prediction
-```
+1. Clone this GitHub repo
 
-Then open up Jupyter Lab with the following command:
+### Analysis
 
-```
-jupyter lab
-```
+1. Start Docker Desktop
+2. In terminal navigate to the project root folder and run this command: `docker compose up`
+3. In the terminal output for the above command look for a ULR beginning with `http://127.0.0.1:8888/lab?token=`
+4. Copy the above URL in its entirety
+5. Paste the URL into any web browser
+6. Run the analysis by opening `diabetes_predition/notebooks/cdc_diabetes_prediction_report.ipynb` and clicking Run > Run All Cells
 
-Navigate to `cdc_diabetes_prediction_analysis.ipynb` in Jupyter Lab. Select the Python Kernel and then under the `Kernel` menu, click `Restart Kernel and Run All Cells`.
+### Closing
+
+To safely close the docker container
+
+1. In terminal press `Crtl+C`
+2. Once the container has stopped enter this terminal command to remove the container `docker-compose rm` type `y` to confirm
 
 ## References and Acknowledgements
 

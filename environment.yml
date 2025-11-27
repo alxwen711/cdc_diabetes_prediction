@@ -1,7 +1,6 @@
 name: cdc_diabetes_prediction
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - ipykernel=6.26.0
   - vegafusion-jupyter=1.4.3
@@ -19,4 +18,7 @@ dependencies:
   - python=3.11.6
   - vl-convert-python=1.0.1
   - pandas=2.1.2
-  - deepchecks=0.3.2
+  - pandera=0.27.0
+  - pip
+    - deepchecks==0.3.2
+
