@@ -1,0 +1,12 @@
+services:
+  analysis-env:
+    image:  meirikson/cdc_diabetes_prediction:ffeab75
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/diabetes_prediction
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+    platform: linux/amd64
