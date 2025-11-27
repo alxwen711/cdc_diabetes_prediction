@@ -47,7 +47,7 @@ jobs:
       - name: Update docker-compose.yml with new image tag
         if: success()
         run: |
-          sed -i "s|image:  ttimbers/breast-cancer-predictor:.*|image:  ttimbers/breast-cancer-predictor:${{ steps.meta.outputs.version }}|" docker-compose.yml
+          sed -i "s|image:  meirikson/cdc_diabetes_prediction:.*|image:  meirikson/cdc_diabetes_prediction:${{ steps.meta.outputs.version }}|" docker-compose.yml
 
       - name: Commit and push updated docker-compose.yml
         if: success()
