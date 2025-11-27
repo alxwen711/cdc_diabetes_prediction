@@ -17,6 +17,8 @@ The full report of our findings can be found [here](https://github.com/alxwen711
 
 - [Docker](https://www.docker.com/)
 
+- [Docker image created for this analysis](https://hub.docker.com/r/meirikson/cdc_diabetes_prediction)
+
 ## Usage
 
 ### Setup
@@ -36,7 +38,7 @@ The full report of our findings can be found [here](https://github.com/alxwen711
 
 To safely close the docker container
 
-1. In terminal press crtl-C
+1. In terminal press `Crtl+C`
 2. Once the container has stopped enter this terminal command to remove the container `docker-compose rm` type `y` to confirm
 
 ## References and Acknowledgements
