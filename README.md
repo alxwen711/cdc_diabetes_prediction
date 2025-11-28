@@ -2,6 +2,8 @@
 
 **Authors: Michael Eirikson, Raymond Wang, Alexander Wen**
 
+## Summary
+
 Basic data analysis on predicting diabetes based on health and lifestyle features following sound data scientific workflows as part of the main project for DSCI 522 (Data Science Workflows), a course in the Master of Data Science program at the University of British Columbia.
 
 ## About
@@ -11,7 +13,6 @@ In this project we explored a decision tree model and naive bayes for predicting
 We conclude that the decision tree model was the best performing of the models tested, correctly detected 8309 of 10604 positive cases (recall rate is about 78%). This result does come at a fairly significant cost in terms of false positives (precision rate is about 29%) with 20054 false positives. Depending on the actual cost of false positive this may need significant improvement to be a viable screening model.
 
 The full report of our findings can be found [here](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/notebooks/cdc_diabetes_prediction_report.ipynb).
-
 
 ## Dependencies
 
@@ -51,12 +52,54 @@ If these are issues try:
 - restart the contrainer as described above
 - don't click on anything except to navigate to the `cdc_diabetes_prediction_report.ipynb` notebook and click Run > Run All Cells
 
+### Updating the environment and docker image
+
+To update the environment and docker image follow these steps
+
+1. Make sure you have a clean, current version of the envrionment by running
+
+```bash
+conda activate cdc_diabetes_prediction
+conda env update --file environment.yml --prune
+```
+
+2. Install any new libraries
+    - If conda fails to resolve dependencies try updating `environment.yml` and removing version numbers.
+    - Note python must remain v 3.11 `python=3.11.6`
+    - Note this is risky, different library version may cause issues builing the docker image
+
+```bash
+conda install <package>
+```
+
+3. Update `environment.yml` with
+
+```bash
+conda export --from-history > environment.yml
+```
+
+4. Create new `conda-linux-64.lock` file
+
+```bash
+conda-lock -k explicit --file environment.yml -p linux-64
+```
+
+5. Commit and push branch to remote repo.
+    - The docker publish workflow will trigger and build and push a new docker image to DockerHub, then update the image tag in `docker-compose.yml`
+    - Once the workflow is complete, pull the branch to locally get the updated `docker-comose.yml` file
+
+6. Launch the new container with
+
+```bash
+docker-compose up
+```
+
+
 ## References and Acknowledgements
 
 The dataset utilized is the CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). A cleaned version of this dataset has been prepared by Aex Teboul and be accessed through Kaggle under the [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data). Lastly, our project makes use of the `ucimlrepo` library to access the dataset more easily, further documentation for this tool is located at [https://github.com/uci-ml-repo/ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo).
 
 The full list of references for the project can be found in the `References` section of the [CDC Diabetes Prediction report](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/notebooks/cdc_diabetes_prediction_report.ipynb)
-
 
 ## [License](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/LICENSE)
 
