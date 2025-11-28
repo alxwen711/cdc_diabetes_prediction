@@ -6,4 +6,4 @@ RUN conda update --quiet --file /tmp/conda-linux-64.lock \
     && conda clean --all -y -f \
     && fix-permissions "${CONDA_DIR}" \
     && fix-permissions "/home/${NB_USER}" \
-    && pip install deepchecks==0.3.2
+    && pip install deepchecks==0.18.1

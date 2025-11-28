@@ -20,5 +20,5 @@ dependencies:
   - pandas=2.1.2
   - pandera=0.27.0
   - pip
-    - deepchecks==0.3.2
+    - deepchecks==0.18.1
 
