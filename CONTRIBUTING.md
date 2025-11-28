@@ -21,6 +21,10 @@ bug, create an associated issue and illustrate the bug with a minimal [reprex](h
 * We recommend that you create a Git branch for each pull request (PR).  
 * New code should follow the tidyverse [style guide](http://style.tidyverse.org) or PEP8 [style guide](https://www.python.org/dev/peps/pep-0008/).
 
+## Updating environment and docker image
+
+Instructions for how to update the environment/docker image can be found in `README.md`
+
 ## Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
