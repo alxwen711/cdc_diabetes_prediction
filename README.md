@@ -8,7 +8,7 @@ Basic data analysis on predicting diabetes based on health and lifestyle feature
 
 In this project we explored a decision tree model and naive bayes for predicting diabetes. After concluding that the decision tree is stronger in this context, We then utilized f2-score as our scoring function due to the context of our problem placing higher severity on false negatives rather than false positives for detecting diabetes.
 
-We conclude that the decision tree model was the best performing of the models tested, correctly detected 8283 of 10604 positive cases (recall rate is about 78%). This result does come at a fairly significant cost in terms of false positives (precision rate is about 30%) with 19650 false positives. Depending on the actual cost of false positive this may need significant improvement to be a viable screening model.
+We conclude that the decision tree model was the best performing of the models tested, correctly detected 8309 of 10604 positive cases (recall rate is about 78%). This result does come at a fairly significant cost in terms of false positives (precision rate is about 29%) with 20054 false positives. Depending on the actual cost of false positive this may need significant improvement to be a viable screening model.
 
 The full report of our findings can be found [here](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/notebooks/cdc_diabetes_prediction_report.ipynb).
 
@@ -40,6 +40,16 @@ To safely close the docker container
 
 1. In terminal press `Crtl+C`
 2. Once the container has stopped enter this terminal command to remove the container `docker-compose rm` type `y` to confirm
+
+### Known Issues
+
+On some apple silicon machines there is an issue with the kernel in jupyterlabs. The kernel may hang when started or when restarted or if sklearn functions use n_jobs>1.
+
+If these are issues try:
+
+- safely closing the container as described above
+- restart the contrainer as described above
+- don't click on anything except to navigate to the `cdc_diabetes_prediction_report.ipynb` notebook and click Run > Run All Cells
 
 ## References and Acknowledgements
 
