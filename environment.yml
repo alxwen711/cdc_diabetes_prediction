@@ -19,5 +19,6 @@ dependencies:
   - pandera=0.27.0
   - click=8.3.1
   - quarto=1.8.26
-  - pip
-    - deepchecks==0.18.1
+  - conda-lock=3.0.4
+  # - pip
+  #   - deepchecks==0.18.1
