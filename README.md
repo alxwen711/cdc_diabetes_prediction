@@ -94,6 +94,19 @@ conda-lock -k explicit --file environment.yml -p linux-64
 docker-compose up
 ```
 
+## Running Individual Scripts
+
+To run individual scripts for the analysis, navigate to the project root folder, and run these commands sequentially:
+
+```
+python scripts/01-download_extract.py
+python scripts/02-clean_transform_data.py
+python scripts/03-split_preprocess_data.py
+python scripts/04-EDA.py
+python scripts/05-model_fitting.py
+python scripts/06-model_evaluation.py
+```
+
 
 ## References and Acknowledgements
 
