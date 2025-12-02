@@ -20,5 +20,5 @@ dependencies:
   - click=8.3.1
   - quarto=1.8.26
   - conda-lock=3.0.4
-  # - pip
-  #   - deepchecks==0.18.1
+  - pip
+    - deepchecks==0.18.1
