@@ -164,7 +164,7 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
         os.makedirs(filepath)
 
     # Save Raw Data
-    data.to_csv(os.path.join(filepath,filename))
+    data.to_csv(os.path.join(filepath,filename), index = False)
 
     
 
