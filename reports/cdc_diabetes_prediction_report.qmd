@@ -1,6 +1,6 @@
 ---
 title: Diabetes Prediction
-author: "Alexander Wen, Raymond Wong, Michael Eirikson
+author: "Alexander Wen, Raymond Wong, Michael Eirikson"
 jupyter: python3
 format:
     pdf:
@@ -18,7 +18,7 @@ execute:
 
 ## Introduction
 
-{{< include sections/_intoduction.qmd >}}
+{{< include sections/_introduction.qmd >}}
 
 ## Methods
 
