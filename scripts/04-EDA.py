@@ -1,11 +1,15 @@
 import click
 import pandas as pd
+import altair as alt
+import os
+
 # import script 03-split_preprocess_data.py to obtain training data
 preprocess_name = "03-split_preprocess_data"
 preprocess = __import__(preprocess_name)
 
 def eda_describe(df):
-    """Macro function to output the head, tail, and description (df.describe) of a DataFrame for EDA purposes
+    """Macro function to output the head, tail, and description (df.describe) of a DataFrame 
+    representing the training data for EDA purposes
     
     Parameters
     ----------
@@ -38,28 +42,24 @@ def eda_describe(df):
     75%    1.750000  3.750000
     max    2.000000  4.000000
     """
+    print("First few rows of the training data:")
     print(df.head())
-    print("\n")
+    print("\nLast few rows of the training data:")
     print(df.tail())
-    print("\n")
+    print("\nDescription of the training data:")
     print(df.describe())
     
 
-def eda_count():
-    """short_description
+def eda_count(y_train: pd.Series) -> alt.Chart:
+    """
+    Creates a plot of the frequency of the target labels in the training data.
     
-    longer_description
-    
-    Notes
-    -----
     
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
-    
+    y_train : pd.Series
+        pd.Series object containing all the target labels
+
     Returns
     -------
     int
@@ -69,13 +69,16 @@ def eda_count():
     --------
     >>> snake_case(a, b)
     output
-    
-    Raises
-    --------
-    SomeError
-        when some error
-    
     """
+    diabetes_count = pd.DataFrame(y_train.value_counts()).reset_index()
+
+    chart = alt.Chart(diabetes_count).mark_bar().encode(
+        x=alt.X('diabetes:O', title='Has Diabetes'),
+        y="count",
+        color="diabetes:N"
+    ).properties(title='Count of Diabetes vs Non-Diabetes Records in Dataset')
+
+    return chart
 
 def eda_histogram():
     """short_description
@@ -173,21 +176,23 @@ def eda_correlation():
     
     """
 
-def save_figure(plot, path: str):
-    """short_description
-    
-    longer_description
-    
-    Notes
-    -----
+
+def save_figure(plot: alt.Chart, command: str,  path: str = "img"):
+    """
+    Saves a Altair Chart created from a previous EDA function to the given path under a specified name.
     
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
-    
+    plot: alt.Chart
+        The Altair Chart created from a previous EDA function.
+    command: str
+        The command used to create the Altair Chart from `run_eda_function`,
+        this will result in the filename being [command].png.
+    path: str, default = "img"
+        The directory path to save the chart to. The default option
+        will save the plot to the `img` folder relative to the root 
+        directory, creating it if it does not currently exist.
+
     Returns
     -------
     int
@@ -204,8 +209,20 @@ def save_figure(plot, path: str):
         when some error
     
     """
+    if path == None: path = "img"
+
+    # check if folder exists
+    
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    # Save Raw Data
+    filename = command + ".png"
+    plot.save(os.path.join(path,filename))
 
 
+command_options = ['describe', 'count', 'histogram', 'boxplot', 'correlation', 'saveallcharts']
+plot_options = ["count", "boxplot", "histogram", "correlation"]
 
 
 @click.command()
@@ -214,14 +231,14 @@ def save_figure(plot, path: str):
     "-c", 
     type = str, 
     default = "count", 
-    help = "Run a specific EDA command from the list of EDA tasks done in order: \n ['describe', 'count', 'histogram', 'boxplot', 'correlation', 'saveallcharts']"
+    help = f"Run a specific EDA command from the list of EDA tasks done in order: \n {command_options}"
 )
 @click.option(
     "--path",
     "-p",
     type = str,
     default = None,
-    help = "Specify a specific directory to save a generated image to if the EDA command is among the following: \n ['count', 'boxplot', 'histogram', 'correlation', 'saveallcharts']"
+    help = f"Specify a specific directory to save a generated image to if the EDA command is among the following: \n {plot_options} \n 'saveallcharts' (special command that does all of the above in one query)"
 )
 def run_eda_function(command: str, path = None):
     plot = None
@@ -235,6 +252,7 @@ def run_eda_function(command: str, path = None):
             eda_describe(train_df)
         case "count":
             click.echo("Creating basic bar plot for count of target labels...")
+            plot = eda_count(y_train)
         case "histogram":
             click.echo("Creating histograms of all features...") # Might be adjusted?
         case "boxplot":
@@ -247,9 +265,9 @@ def run_eda_function(command: str, path = None):
             click.echo("Command is not recognized from the options ['describe', 'count', 'boxplot', 'histogram', 'correlation', 'saveallcharts'], no action performed")
             return
     click.echo(f"Command {command} compeleted as expected.")
-    if path != None and command in ["count", "boxplot", "histogram", "correlation"]:
+    if path != None and command in plot_options:
         click.echo(f"Saving plot to {path}...")
-        save_figure(plot,path,command)
+        save_figure(plot,command,path)
         click.echo(f"Plot has been saved to {path}.")
 
 """
