@@ -6,7 +6,7 @@ and /data/raw/diabetes_raw_features.csv
 
 # import libraries/packages
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 from sklearn.model_selection import train_test_split
 import os
 import click
@@ -140,9 +140,9 @@ def save_clean_data(train_df: pd.DataFrame, test_df: pd.DataFrame, clean_data_pa
 
 # main function
 @click.command()
-@click.option("--file", default="data/raw/diabetes_raw.csv")
-@click.option("--save-filepath", default="data/clean")
-def main(file: str, clean_file_path: str):
+@click.option("--file", type=str, default="data/raw/diabetes_raw.csv")
+@click.option("--savefilepath", type=str, default="data/clean")
+def main(file: str, savefilepath: str):
     """Load, validate, and split dataset. Returns train and test datasets.
     
     Load the raw dataset and run validation that should be done on the whole
@@ -164,9 +164,7 @@ def main(file: str, clean_file_path: str):
 
     raw_data = load_and_validate_raw_data(file)
     train_df, test_df = split_dataset_and_validate(raw_data)
-    save_clean_data(train_df, test_df, clean_file_path)
+    save_clean_data(train_df, test_df, savefilepath)
 
-
-# call main function
 if __name__ == "__main__":
-    main() # pass any command line args to main here
+    main() 
