@@ -7,10 +7,12 @@ and /data/raw/diabetes_raw_features.csv
 # import libraries/packages
 import pandas as pd
 import pandera as pa
+from sklearn.model_selection import train_test_split
+import os
 import click
 
 # functions
-def load_and_validate_raw_data(file: str):
+def load_and_validate_raw_data(file: str) -> pd.DataFrame:
     """Load raw data from file and perform validation checks on the whole dataset.
     
     Checks: correct data file format, correct column names, no empty observations,
@@ -23,7 +25,7 @@ def load_and_validate_raw_data(file: str):
     Parameters
     ----------
     file : str
-        The file path for the raw data csv
+        The file path for the raw data csv.
     
     Returns
     -------
@@ -73,19 +75,96 @@ def load_and_validate_raw_data(file: str):
 
     schema.validate(raw_data, lazy = True)
 
-def split_dataset_and_validate():
-    pass
+    return raw_data
 
-def save_clean_data():
-    pass
+def split_dataset_and_validate(full_df: pd.DataFrame):
+    """Split dataset into train and test and run validation checks.
+    
+    Split dataset into train and test.
+    
+    Parameters
+    ----------
+    full_df : pd.DataFrame
+        Full raw dataset.
+    
+    Returns
+    -------
+    train_df : pd.DataFrame
+        The train split of full_df.
+    test_df : pd.DataFrame
+        The test split of full_df.
 
 
+    Examples
+    --------
+    >>> split_dataset_and_validate(raw_data)
+    train, test
+        
+    """
+    train_df, test_df = train_test_split(
+        full_df,
+        test_size=0.3,
+        random_state=522,
+        stratify=full_df['diabetes']
+    )
+
+    return train_df, test_df
+
+def save_clean_data(train_df: pd.DataFrame, test_df: pd.DataFrame, clean_data_path: str) -> None:
+    """Save train and test datasets to csv.
+    
+    Parameters
+    ----------
+    train_df : pd.DataFrame
+        The train dataframe to save.
+    test_df : pd.DataFrame
+        The test dataframe to save.
+    
+    Returns
+    -------
+    None
+        
+    """
+
+    # check/create clean data folder
+    if not os.path.exists(clean_data_path):
+        os.makedirs(clean_data_path)
+
+    # save processed data
+    train_df.to_csv(clean_data_path+"/diabetes_train.csv", index=False)
+    test_df.to_csv(clean_data_path+"/diabetes_test.csv", index=False)
+    
+
+### ADD CLEAN FILEPATH W DEFAULT
+### ADD FILENAME W DEFAULT
 
 # main function
 @click.command()
 @click.option("--file", default="/data/raw/diabetes_raw.csv")
-def main():
-    # code for "guts" of script goes here
+def main(file: str):
+    """Load, validate, and split dataset. Returns train and test datasets.
+    
+    Load the raw dataset and run validation that should be done on the whole
+    dataset. Then split into train and test datasets and run validation checks
+    that should be done separately. Returns train and test datasets.
+        
+    Parameters
+    ----------
+    file : str
+        description
+    b : int, optional (default = 0)
+        description
+    
+    Returns
+    -------
+    None
+
+    """
+
+    raw_data = load_and_validate_raw_data(file)
+    train_df, test_df = split_dataset_and_validate(raw_data)
+    save_clean_data(train_df, test_df, clean_data_path)
+
 
 # call main function
 if __name__ == "__main__":
