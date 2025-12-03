@@ -5,7 +5,7 @@ and /data/raw/diabetes_raw_features.csv, validate the data, split into train
 and test datasets, and save to data/clean
 """
 
-# import libraries/packages
+# imports
 import pandas as pd
 import pandera.pandas as pa
 from sklearn.model_selection import train_test_split
