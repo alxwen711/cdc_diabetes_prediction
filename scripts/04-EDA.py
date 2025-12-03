@@ -54,7 +54,6 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
     """
     Creates a plot of the frequency of the target labels in the training data.
     
-    
     Parameters
     ----------
     y_train : pd.Series
@@ -62,8 +61,8 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
 
     Returns
     -------
-    int
-        description
+    alt.Chart
+        Frequency bar graph of the labels.
     
     Examples
     --------
@@ -177,7 +176,7 @@ def eda_correlation():
     """
 
 
-def save_figure(plot: alt.Chart, command: str,  path: str = "img"):
+def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     """
     Saves a Altair Chart created from a previous EDA function to the given path under a specified name.
     
@@ -185,40 +184,28 @@ def save_figure(plot: alt.Chart, command: str,  path: str = "img"):
     ----------
     plot: alt.Chart
         The Altair Chart created from a previous EDA function.
-    command: str
-        The command used to create the Altair Chart from `run_eda_function`,
-        this will result in the filename being [command].png.
-    path: str, default = "img"
+    filename: str
+        The filename to save the image to.
+    filepath: str, default = "img"
         The directory path to save the chart to. The default option
         will save the plot to the `img` folder relative to the root 
         directory, creating it if it does not currently exist.
-
-    Returns
-    -------
-    int
-        description
     
     Examples
     --------
-    >>> snake_case(a, b)
-    output
-    
-    Raises
-    --------
-    SomeError
-        when some error
-    
+    >>> plot = alt.Chart(...)
+    >>> save_figure(plot,"count.png","img")
     """
-    if path == None: path = "img"
+    
+    if filepath == None: filepath = "img"
 
     # check if folder exists
     
-    if not os.path.exists(path):
-        os.makedirs(path)
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
 
     # Save Raw Data
-    filename = command + ".png"
-    plot.save(os.path.join(path,filename))
+    plot.save(os.path.join(filepath,filename))
 
 
 command_options = ['describe', 'count', 'histogram', 'boxplot', 'correlation', 'saveallcharts']
@@ -247,39 +234,39 @@ def run_eda_function(command: str, path = None):
     train_df["diabetes"] = y_train
     
     match command:
+        
         case "describe":
             click.echo("Printing description of training data...")
             eda_describe(train_df)
+        
         case "count":
             click.echo("Creating basic bar plot for count of target labels...")
             plot = eda_count(y_train)
+        
         case "histogram":
             click.echo("Creating histograms of all features...") # Might be adjusted?
+        
         case "boxplot":
             click.echo("Creating boxplots of all non-binary features...")
+        
         case "correlation":
             click.echo("Creating feature-feature correlation plot on training data...")
+            plot = eda_correlation(X_train)
+        
         case "saveallcharts":
             click.echo(f"Creating and saving ALL EDA charts to directory {path}...")
+            for po in plot_options:
+                run_eda_function(po,path)
+        
         case _:
             click.echo("Command is not recognized from the options ['describe', 'count', 'boxplot', 'histogram', 'correlation', 'saveallcharts'], no action performed")
             return
+    
     click.echo(f"Command {command} compeleted as expected.")
     if path != None and command in plot_options:
         click.echo(f"Saving plot to {path}...")
-        save_figure(plot,command,path)
+        save_figure(plot,command+".png",path)
         click.echo(f"Plot has been saved to {path}.")
-
-"""
-TODO:
-
-Currently run EDA function is pulling up the X_train and y_train for each individual function, either:
-- rework the interface to load data first and then run multiple commands at a time (see next points for changes)
-- add additional command to make all of the plots at once
-- combine head/tail/describe blocks into a single function (they appear sequentially in the ipynb already)
-
-- assuming above template is accurate, then use ipynb code to fill in the gaps
-"""
 
 
 if __name__ == "__main__":
