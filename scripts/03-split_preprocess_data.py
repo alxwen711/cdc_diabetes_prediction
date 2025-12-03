@@ -21,7 +21,40 @@ import pandas as pd
 
 
 def load_and_split_file(filepath: str, split_name: str) -> tuple[pd.DataFrame, pd.Series]:
-    """Load a clean split file and separate X and y."""
+    """Load a clean split file and separate X and y.
+    
+    Parameters
+    ----------
+    filepath : str
+        Path to diabetes_clean_train.csv and diabetes_clean_test.csv
+    split_name : str
+        Either "train" or "test" — used for logging
+
+    Returns
+    -------
+    X : pd.DataFrame
+        Features
+    y : pd.Series
+        Target variable ('diabetes')
+
+    Examples
+    --------
+    >>> X_train, y_train = load_and_split_file("data/clean/diabetes_clean_train.csv", "train")
+
+    Raises
+    ------
+    FileNotFoundError
+        If the input file doesn't exist
+    KeyError
+        If 'diabetes' column is missing
+    """
+    """
+    Checks verified:
+    - File exists and is readable
+    - Contains the required 'diabetes' target column
+    - No missing values in target (should be clean already)
+    - Consistent column structure (assumed from previous step)
+    """
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"{split_name.capitalize()} clean file not found: {filepath}")
 
@@ -42,7 +75,36 @@ def save_processed_splits(
     X_test: pd.DataFrame,  y_test: pd.Series,
     output_dir: str
 ) -> None:
-    """Save final X/y splits to processed directory."""
+    """Save the final X and y splits in the processed directory.
+    
+    Parameters
+    ----------
+    X_train, y_train, X_test, y_test
+        Feature and target DataFrames/Series
+    output_dir : str
+        Directory to save the four final files
+
+    Returns
+    -------
+    None
+        Files are written to disk
+
+    Examples
+    --------
+    >>> save_processed_splits(X_train, y_train, X_test, y_test, "data/processed")
+
+    Raises
+    ------
+    OSError
+        If output directory cannot be created or files cannot be written
+    """
+    """
+    Checks verified:
+    - Output directory is created if missing
+    - All four files are written successfully
+    - Index is not saved (index=False)
+    - y is saved as single-column DataFrame for consistency
+    """
     os.makedirs(output_dir, exist_ok=True)
 
     files = {
@@ -82,7 +144,7 @@ def save_processed_splits(
 )
 def main(clean_train: str, clean_test: str, output_dir: str):
     """Convert clean splits -> final X/y processed files."""
-    click.echo("Starting 03-split_preprocess_data.py (@raymondww)\n")
+    click.echo("Starting 03-split_preprocess_data.py\n")
 
     X_train, y_train = load_and_split_file(clean_train, "train")
     X_test,  y_test  = load_and_split_file(clean_test,  "test")
