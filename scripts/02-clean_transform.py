@@ -1,7 +1,8 @@
 """Clean and transform raw data.
 
 This script will load the raw data from /data/raw/diabetes_raw_features.csv
-and /data/raw/diabetes_raw_features.csv
+and /data/raw/diabetes_raw_features.csv, validate the data, split into train
+and test datasets, and save to data/clean
 """
 
 # import libraries/packages
@@ -131,8 +132,8 @@ def save_clean_data(train_df: pd.DataFrame, test_df: pd.DataFrame, clean_data_pa
         os.makedirs(clean_data_path)
 
     # save processed data
-    train_df.to_csv(clean_data_path+"/diabetes_train.csv", index=False)
-    test_df.to_csv(clean_data_path+"/diabetes_test.csv", index=False)
+    train_df.to_csv(clean_data_path+"/diabetes_clean_train.csv", index=False)
+    test_df.to_csv(clean_data_path+"/diabetes_clean_test.csv", index=False)
     
 
 ### ADD CLEAN FILEPATH W DEFAULT
