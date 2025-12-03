@@ -1,3 +1,10 @@
+"""Load raw CDC diabetes data and save to csv.
+
+This sciprt will load the raw dataset from the UCI ML Repository, 
+combine the target and features into one dataframe and save as a 
+csv. The default folder and filename is data/raw/diabetes_raw.csv
+"""
+
 import pandas as pd
 import os
 from ucimlrepo import fetch_ucirepo 
