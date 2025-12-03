@@ -140,8 +140,9 @@ def save_clean_data(train_df: pd.DataFrame, test_df: pd.DataFrame, clean_data_pa
 
 # main function
 @click.command()
-@click.option("--file", default="/data/raw/diabetes_raw.csv")
-def main(file: str):
+@click.option("--file", default="data/raw/diabetes_raw.csv")
+@click.option("--save-filepath", default="data/clean")
+def main(file: str, clean_file_path: str):
     """Load, validate, and split dataset. Returns train and test datasets.
     
     Load the raw dataset and run validation that should be done on the whole
@@ -163,7 +164,7 @@ def main(file: str):
 
     raw_data = load_and_validate_raw_data(file)
     train_df, test_df = split_dataset_and_validate(raw_data)
-    save_clean_data(train_df, test_df, clean_data_path)
+    save_clean_data(train_df, test_df, clean_file_path)
 
 
 # call main function
