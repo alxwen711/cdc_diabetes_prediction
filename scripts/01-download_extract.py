@@ -29,10 +29,6 @@ def obtain_raw_data():
     return X,y
 
     
-#@click.command()
-#@click.option("--filepath", type = str, default = "../data/raw", help = "Directory location to write the combined DataFrame in csv format.")
-#@click.option("--filename", type = str, default = "diabetes_raw.csv", help = "Name of the file to write the DataFrame to.")
-#@click.option("--label", type = str, default = "diabetes", help = "Name of the target value column in the combined DataFrame.")
 def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", filename: str = "diabetes_raw.csv", label: str = "diabetes"):
     """
     Writes the raw analysis dataframes to a single file. If the
@@ -83,10 +79,35 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
     # Save Raw Data
     data.to_csv(os.path.join(filepath,filename), index = False)
 
+@click.command()
+@click.option(
+    "--filepath", 
+    type = str, 
+    default = "data/raw", 
+    help = "Directory location to write the combined DataFrame in csv format."
+)
+@click.option(
+    "--filename", 
+    type = str, 
+    default = "diabetes_raw.csv", 
+    help = "Name of the csv file to write the DataFrame to."
+)
+@click.option(
+    "--label", 
+    type = str, 
+    default = "diabetes", 
+    help = "Name of the target value column in the combined DataFrame."
+)
+def main(filepath: str = "data/raw", filename: str = "diabetes_raw.csv", label: str = "diabetes"):
+    """Obtain raw CDC diabetes data and save to a single raw csv file. Default location is data/raw/diabetes_raw.csv."""
     
-def main():
+    click.echo("Obtaining raw CDC data...")
     X,y = obtain_raw_data()
-    save_raw_data(X,y)
+    
+    click.echo(f"Raw CDC data obtained, writing to {filepath}/{filename}...")
+    save_raw_data(X, y, filepath, filename, label)
+    
+    click.echo(f"Raw data extraction to {filepath}/{filename} is complete")
 
 if __name__ == "__main__":
     main()
