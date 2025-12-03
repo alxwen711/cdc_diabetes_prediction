@@ -1,0 +1,61 @@
+---
+title: Diabetes Prediction
+author: "Alexander Wen, Raymond Wong, Michael Eirikson
+jupyter: python3
+format:
+    pdf:
+        toc: true
+        toc-depth: 2
+bibliography: references.bib
+execute:
+  echo: false
+  warning: false
+---
+
+## Summary
+
+{{< include sections/_summary.qmd >}}
+
+## Introduction
+
+{{< include sections/_intoduction.qmd >}}
+
+## Methods
+
+{{< include sections/_methods.qmd >}}
+
+### Modeling Approach
+
+{{< include sections/_modeling_approach.qmd >}}
+
+### Results
+
+{{< include sections/_results.qmd >}}
+
+## EDA
+
+{{< include sections/_eda.qmd >}}
+
+### Data Summary
+
+{{< include sections/_data_summary.qmd >}}
+
+### Visualizations
+
+{{< include sections/_eda_visualizations.qmd >}}
+
+## Modeling
+
+### Classification Analysis
+
+{{< include sections/_classification_analysis.qmd >}}
+
+### Result Visualizations
+
+{{< include sections/_results_visualizations.qmd >}}
+
+## Discussion
+
+{{< include sections/_discussion.qmd >}}
+
+## References
