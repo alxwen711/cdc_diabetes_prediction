@@ -20,7 +20,7 @@ import os
 import click
 
 # functions
-def load_training_data(X_file: str, y_file) -> tuple[pd.DataFrame, pd.DataFrame]:
+def load_training_data(X_file: str, y_file) -> tuple[pd.DataFrame, pd.Series]:
     """Load X_train and y_train csv files to pandas dataframes.
         
     Parameters
@@ -34,16 +34,16 @@ def load_training_data(X_file: str, y_file) -> tuple[pd.DataFrame, pd.DataFrame]
     -------
     pd.Dataframe
         X_train dataframe.
-    pd.Dataframe
-        y_train dataframe.
+    pd.Series
+        y_train series.
     
     """
 
     X_train = pd.read_csv(X_file)
-    y_train = pd.read_csv(y_file)
+    y_train = pd.read_csv(y_file)["diabetes"]
     return X_train, y_train
 
-def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionTreeClassifier:
+def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.Series) -> DecisionTreeClassifier:
     """Fit a decision tree model on training dataset to predict diabetes.
         
     Uses grid search to find good hyperparameters.
@@ -52,7 +52,7 @@ def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionT
     ----------
     X_train : pd.Dataframe
         Training dataset of model features.
-    y_train : pd.Datafram
+    y_train : pd.Series
         Target values for training dataset.
     
     Returns
@@ -78,7 +78,7 @@ def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionT
 
     return best_tree
     
-def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.DataFrame):
+def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.Series):
     """Fit a bernoulli naive bayes model on training dataset to predict diabetes.
         
     Uses grid search to find good hyperparameters.
@@ -87,7 +87,7 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.DataFrame):
     ----------
     X_train : pd.Dataframe
         Training dataset of model features.
-    y_train : pd.Datafram
+    y_train : pd.Series
         Target values for training dataset.
     
     Returns
@@ -160,7 +160,7 @@ def pickle_models(model, file_name: str) -> None:
     default = "data/processed/diabetes_y_train.csv", 
     help = "Directory and file name of y train csv file."
 )
-def main():
+def main(xfile: str, yfile: str):
     X_train, y_train = load_training_data(xfile, yfile)
     best_dt = fit_decision_tree(X_train, y_train)
     best_nb = fit_naive_bayes(X_train, y_train)
