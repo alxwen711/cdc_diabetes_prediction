@@ -157,8 +157,8 @@ def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
     df_sample_binary = df_long[df_long["feature"].isin(binary_features)]
     df_sample_binary["label"] = df_sample_binary.apply(generate_label, axis = 1)
     chart = alt.Chart(df_sample_binary).mark_bar().encode(
-        x=alt.X("label"), # Chose to use ordinal instead of quantitative because this works better for most features
-        y=alt.Y("count()", title="Count").stack(False),
+        x=alt.Y("count()", title="Count").stack(False),
+        y=alt.X("label"), 
         color=alt.Color("diabetes:N"),
     ).properties(
         width=150,
@@ -236,7 +236,7 @@ def eda_correlation(X_train):
     chart = alt.Chart(correlation_long).mark_rect().encode(
         x='Feature 1:O',
         y='Feature 2:O',
-        color=alt.Color('Correlation:Q', scale=alt.Scale(scheme='viridis')),
+        color=alt.Color('Correlation:Q', scale=alt.Scale(domain = [-1,1], scheme='spectral')),
         tooltip=['Feature 1', 'Feature 2', 'Correlation']
     ).properties(
         width=600,
