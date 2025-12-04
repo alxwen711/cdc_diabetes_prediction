@@ -15,7 +15,9 @@ from sklearn.metrics import make_scorer, fbeta_score
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
+import pickle
 import os
+import click
 
 # functions
 def load_training_data(X_file: str, y_file) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -115,9 +117,55 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.DataFrame):
 
     return best_nb
 
-
-def main():
+def pickle_models(model, file_name: str) -> None:
+    """Save sklearn model as a pickle file given the file path and name.
     
+    Parameters
+    ----------
+    model : a sklearn model
+        The model to pickle
+    file_path : str
+        The file path to directory to save in, starting from the project root.
+    filt_name : str
+        The name to give the pickle file.
+
+    Returns
+    -------
+    None
+    
+    """
+
+    path = "results/models/"
+
+    # check/create model data folder
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    # save model
+    path_file_name = path + file_name
+    with open(path_file_name, "wb") as f:
+        pickle.dump(model, f)
+
+
+@click.command()
+@click.option(
+    "--xfile", 
+    type = str, 
+    default = "data/processed/diabetes_X_train.csv", 
+    help = "Directory and file name of X train csv file."
+)
+@click.option(
+    "--yfile", 
+    type = str, 
+    default = "data/processed/diabetes_y_train.csv", 
+    help = "Directory and file name of y train csv file."
+)
+def main():
+    X_train, y_train = load_training_data(xfile, yfile)
+    best_dt = fit_decision_tree(X_train, y_train)
+    best_nb = fit_naive_bayes(X_train, y_train)
+    pickle_models(best_dt, "tree_model.pickle")
+    pickle_models(best_nb, "naive_bayes_model.pickle")
 
 if __name__ == "__main__":
     main()
