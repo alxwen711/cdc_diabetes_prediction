@@ -11,15 +11,15 @@ Purpose:
 
 import os
 import click
+import pickle
 import pandas as pd
 import altair as alt
-from typing import Tuple
 
 
 def load_test_data(
     x_path: str = "data/processed/diabetes_X_test.csv",
     y_path: str = "data/processed/diabetes_y_test.csv"
-) -> Tuple[pd.DataFrame, pd.Series]:
+) -> tuple[pd.DataFrame, pd.Series]:
     """
     Load final processed test features and target.
    
@@ -53,6 +53,11 @@ def load_test_data(
     - Both files exist and are readable
     - y_test contains exactly one column named 'diabetes'
     - No unexpected index columns
+    
+    Return
+    -----------
+    X_test : pd.DataFrame
+    y_test : pd.Series
     """
     if not os.path.exists(x_path):
         raise FileNotFoundError(f"Test features file not found: {x_path}")
@@ -68,11 +73,70 @@ def load_test_data(
     y_test = y_df["diabetes"]
    
     click.echo(
-        f"Loaded test set: {X_test.shape[0]:,} samples × "
-        f"{X_test.shape[1]} features, {y_test.shape[0]:,} labels"
+        f"Loaded test set: {X_test.shape[0]:,} samples "
     )
     return X_test, y_test
 
+def load_pickle_models(
+    model_dir: str = "models"
+) -> tuple[object, object]:
+    """
+    Load both trained models from the models directory.
+   
+    Expected files:
+        models/tree_model.pkl
+        models/naive_bayes_model.pkl
+   
+    Parameters
+    ----------
+    model_dir : str, default "models"
+        Directory containing the pickled model files
+   
+    Returns
+    -------
+    tree_model : object
+        Loaded Decision Tree model
+    nb_model : object
+        Loaded Naive Bayes model
+   
+    Examples
+    --------
+    >>> tree, nb = load_pickle_models("models")
+   
+    Raises
+    ------
+    FileNotFoundError
+        If either model file is missing
+    pickle.UnpicklingError
+        If model file is corrupted
+    """
+    tree_path = os.path.join(model_dir, "tree_model.pkl")
+    nb_path = os.path.join(model_dir, "naive_bayes_model.pkl")
+   
+    missing = []
+    if not os.path.exists(tree_path):
+        missing.append(tree_path)
+    if not os.path.exists(nb_path):
+        missing.append(nb_path)
+   
+    if missing:
+        raise FileNotFoundError(
+            f"Model files not found in {model_dir}:\n" + "\n".join(f"  - {p}" for p in missing)
+        )
+   
+    try:
+        with open(tree_path, "rb") as f:
+            tree_model = pickle.load(f)
+        with open(nb_path, "rb") as f:
+            nb_model = pickle.load(f)
+    except (pickle.UnpicklingError, EOFError) as e:
+        raise pickle.UnpicklingError(f"Failed to load model (corrupted file): {e}")
+   
+    click.echo(f"Loaded models from: {os.path.abspath(model_dir)}")
+    click.echo("   -> Decision Tree model loaded")
+    click.echo("   -> Naive Bayes model loaded")
+   
+    return tree_model, nb_model
 
 def save_figure(
     plot: alt.Chart,
@@ -134,26 +198,31 @@ def save_figure(
     help="Path to processed test labels (y_test)"
 )
 @click.option(
+    "--model-dir",
+    type=str,
+    default="models",
+    help="Directory containing tree_model.pkl and naive_bayes_model.pkl"
+)
+@click.option(
     "--img-dir",
     type=str,
     default="img",
     help="Directory for saving evaluation plots"
 )
-def main(x_test: str, y_test: str, img_dir: str) -> None:
-    """Model evaluation entrypoint — loads test data and prepares visualisation utilities."""
-    click.echo("Starting 04-evaluate_model.py — Model Evaluation Utilities\n")
+def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
+    """Model evaluation entrypoint — load test data and models for analysis."""
+    click.echo("Starting 04-evaluate_model.py — Model Evaluation & Visualisation\n")
    
-    # Load test data (with full validation)
+    # Load test data
     X_test, y_test = load_test_data(x_path=x_test, y_path=y_test)
    
-    # Example placeholder — replace with actual evaluation code later
-    click.echo("\nTest data loaded successfully — ready for model evaluation & visualisation!")
+    # Load models
+    tree_model, nb_model = load_pickle_models(model_dir=model_dir)
+   
+    click.echo("\nAll data and models loaded successfully!")
+    click.echo(f"-> Test set: {X_test.shape[0]:,} samples")
+    click.echo("-> Models: Decision Tree and Naive Bayes ready")
 
-    # Simple demo output (can be removed later)
-    click.echo("\nFirst few rows of X_test:")
-    click.echo(X_test.head())
-    click.echo("\nFirst few labels (y_test):")
-    click.echo(y_test.head().to_frame().T)
 
 
 if __name__ == "__main__":
