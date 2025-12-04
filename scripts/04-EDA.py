@@ -115,7 +115,62 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
         x="independent",
         y="independent",   
     ).properties(
-        title='Histograms of Features',
+        title='Histograms of Non-Binary Features',
+    )
+
+    return chart
+
+def generate_label(row) -> str:
+    """Helper function to create the x-axis labels for eda_binary.
+    
+    Parameters
+    ----------
+    row : pd.Row
+        A row of a pandas Dataframe.
+
+    Returns
+    -------
+    str
+        str type label used in the binary bar plots.
+    """
+    return f"f = {row['feature_value']}, d = {row['diabetes']}"
+
+def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
+    """
+    Creates a set of bar plots of all binary features in the training data set.
+
+    Parameters
+    ----------
+    X_train : pd.DataFrame
+        pd.DataFrame object containing the training data.
+
+    Returns
+    -------
+    alt.Chart
+        Faceted chart of bar plots for each binary feature.
+    """
+    features = X_train.columns.to_list()
+    df_long = pd.melt(X_train, id_vars=["diabetes"], value_vars=features[:-1], var_name="feature", value_name="feature_value")
+    binary_features = ["HighBP","HighChol","CholCheck","Smoker","Stroke","HeartDiseaseorAttack","PhysActivity",
+                "Fruits","Veggies","HvyAlcoholConsump","AnyHealthcare",
+                "NoDocbcCost","DiffWalk","Sex"]
+    df_sample_binary = df_long[df_long["feature"].isin(binary_features)]
+    df_sample_binary["label"] = df_sample_binary.apply(generate_label, axis = 1)
+    chart = alt.Chart(df_sample_binary).mark_bar().encode(
+        x=alt.X("label"), # Chose to use ordinal instead of quantitative because this works better for most features
+        y=alt.Y("count()", title="Count").stack(False),
+        color=alt.Color("diabetes:N"),
+    ).properties(
+        width=150,
+        height=150,
+    ).facet(
+        "feature:N",
+        columns=3,
+    ).resolve_scale(
+        x="independent",
+        y="independent",   
+    ).properties(
+        title='Bar Plots of Binary Features',
     )
 
     return chart
@@ -254,9 +309,7 @@ def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tab
     df.to_csv(os.path.join(filepath,filename),index = True)
 
 
-command_options = ['describe', 'count', 'histogram', 'boxplot', 'correlation', 'saveallcharts']
-plot_options = ["count", "boxplot", "histogram", "correlation"]
-
+command_options = ['describe', 'count', 'histogram', 'binary', 'boxplot', 'correlation', 'saveallcharts']
 
 @click.command()
 @click.option(
@@ -290,10 +343,13 @@ def run_eda_function(command: str, path = None):
             plot = eda_count(y_train)
         
         case "histogram":
-            click.echo("Creating histograms of all features...") # Might be adjusted?
-            #df_sample = X_train.sample(n=1000, random_state=522)
+            click.echo("Creating histograms of all features...")
             plot = eda_histogram(X_train)
 
+        case "binary":
+            click.echo("Creating bar plots of all binary features...")
+            plot = eda_binary(X_train)
+        
         case "boxplot":
             click.echo("Creating boxplots of all non-binary features from a random sample of 10000 observations...")
             df_sample = X_train.sample(n=1000, random_state=522)
@@ -304,9 +360,35 @@ def run_eda_function(command: str, path = None):
             plot = eda_correlation(X_train)
         
         case "saveallcharts":
+            # Macro command to run ALL plots (to be more convinient for the script, figure out recursion for this step if possible)
             click.echo(f"Creating and saving ALL EDA charts to directory {path}...")
-            for po in plot_options:
-                run_eda_function(po,path)
+            
+            # count
+            click.echo("Creating basic bar plot for count of target labels...")
+            plot = eda_count(y_train)
+            save_figure(plot,"EDA_count.png",path)
+
+            # histogram
+            click.echo("Creating histograms of all features...")
+            plot = eda_histogram(X_train)
+            save_figure(plot,"EDA_histogram.png",path)
+
+            # boxplot
+            click.echo("Creating boxplots of all non-binary features from a random sample of 10000 observations...")
+            df_sample = X_train.sample(n=1000, random_state=522)
+            plot = eda_boxplot(df_sample)
+            save_figure(plot,"EDA_boxplot.png",path)
+
+            # correlation
+            click.echo("Creating feature-feature correlation plot on training data...")
+            plot = eda_correlation(X_train)
+            save_figure(plot,"EDA_correlation.png",path)
+
+            # binary
+            click.echo("Creating bar plots of all binary features...")
+            plot = eda_binary(X_train)
+            save_figure(plot,"EDA_binary.png",path)
+
         case _:
             click.echo("Command is not recognized from the options ['describe', 'count', 'boxplot', 'histogram', 'correlation', 'saveallcharts'], no action performed")
             return
@@ -328,11 +410,6 @@ def run_eda_function(command: str, path = None):
             save_figure(plot,"EDA_"+command+".png",path)
             click.echo(f"Plot has been saved to {path}.")
 
-"""
-TODO PART 2:
-
-The quarto is basically meant to pull the files/tables with all code generating everything as needed
-"""
 
 if __name__ == "__main__":
     run_eda_function()
