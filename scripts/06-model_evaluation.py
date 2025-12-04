@@ -87,8 +87,8 @@ def load_pickle_models(
     Load both trained models from the models directory.
    
     Expected files:
-        models/tree_model.pkl
-        models/naive_bayes_model.pkl
+        models/tree_model.pickle
+        models/naive_bayes_model.pickle
    
     Parameters
     ----------
@@ -141,6 +141,62 @@ def load_pickle_models(
    
     return tree_model, nb_model
 
+def plot_bar(score_df: pd.DataFrame) -> alt.Chart:
+    """
+    Create a bar chart comparing model performance metrics.
+    
+    Parameters
+    ----------
+    score_df : pd.DataFrame
+        DataFrame containing model names and their corresponding performance metrics. 
+    Examples
+    --------
+    >>> chart = plot_bar(score_df)
+    
+    Returns
+    -------
+    alt.Chart
+        An Altair bar chart comparing the performance of different models across various metrics.
+
+    """
+
+    score_melt = score_df.melt(id_vars='Model', var_name='Metric', value_name='Score')
+
+    bar_plot = alt.Chart(score_melt).mark_bar().encode(
+        x='Model:N',
+        y='Score:Q',
+        color='Model:N',
+        column='Metric:N'
+    ).properties(
+        title='Decision Tree vs Naive Bayes Performance on Test Set'
+    )
+    
+# Confusion matrix for best model (decision tree)
+def plot_confusion_matrix(tree_model: object, X_test: pd.DataFrame, y_test: pd.Series) -> None:
+    """
+    Plot the confusion matrix for a given model on the test set.
+    
+    Parameters
+    ----------
+    tree_model : object
+        The trained model to evaluate.
+    X_test : pd.DataFrame
+        The test features.
+    y_test : pd.Series
+        The true labels for the test set.
+    
+    Examples
+    --------
+    >>> plot_confusion_matrix(tree_model, X_test, y_test)
+    """
+
+    ConfusionMatrixDisplay.from_estimator(
+        tree_model,
+        X_test,
+        y_test,
+        values_format="d",
+    )
+
 def create_score_table(X_test: pd.DataFrame, y_test: pd.Series, 
                        best_tree: object, best_nb: object)-> pd.DataFrame:
     models = {
@@ -186,7 +242,6 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     if filepath == None: filepath = "img"
 
     # check if folder exists
-    
     if not os.path.exists(filepath):
         os.makedirs(filepath)
 
@@ -229,11 +284,12 @@ def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
     # Load models
     tree_model, nb_model = load_pickle_models(model_dir=model_dir)
     score_table = create_score_table(X_test, y_test, tree_model, nb_model)
+    bar_plot = plot_bar(score_table)
+    cm = plot_confusion_matrix(tree_model, X_test, y_test)
    
     click.echo("\nAll data and models loaded successfully!")
     click.echo(f"-> Test set: {X_test.shape[0]:,} samples")
     click.echo("-> Models: Decision Tree and Naive Bayes ready")
-    # click.echo("\n Model Performance Summary:",score_table.to_string(index=False))
 
 
 if __name__ == "__main__":
