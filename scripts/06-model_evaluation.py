@@ -85,7 +85,7 @@ def load_test_data(
     return X_test, y_test
 
 def load_pickle_models(
-    model_dir: str = "models"
+    model_dir: str = "results/models"
 ) -> tuple[object, object]:
     """
     Load both trained models from the models directory.
@@ -96,7 +96,7 @@ def load_pickle_models(
    
     Parameters
     ----------
-    model_dir : str, default "models"
+    model_dir : str, default "results/models"
         Directory containing the pickled model files
    
     Returns
@@ -108,7 +108,7 @@ def load_pickle_models(
    
     Examples
     --------
-    >>> tree, nb = load_pickle_models("models")
+    >>> tree, nb = load_pickle_models("results/models")
    
     Raises
     ------
@@ -279,7 +279,7 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
 @click.option(
     "--model-dir",
     type=str,
-    default="models",
+    default="results/models",
     help="Directory containing tree_model.pkl and naive_bayes_model.pkl"
 )
 @click.option(
