@@ -82,7 +82,7 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
 
     return chart
 
-def eda_histogram():
+def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
     """short_description
     
     longer_description
@@ -114,37 +114,44 @@ def eda_histogram():
     
     """
 
-def eda_boxplot():
-    """short_description
-    
-    longer_description
-    
-    Notes
-    -----
-    
+def eda_boxplot(X_train: pd.DataFrame) -> alt.Chart:
+    """
+    Creates a set of boxplots of all non-binary features in the training data set.
+    A random sample of 10000 observations is used for generating these plots due to
+    program runtime constraints and to not oversatuarate the box plots.
+
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
-    
+    X_train : pd.DataFrame
+        pd.DataFrame object containing the training data.
+
     Returns
     -------
-    int
-        description
-    
-    Examples
-    --------
-    >>> snake_case(a, b)
-    output
-    
-    Raises
-    --------
-    SomeError
-        when some error
+    alt.Chart
+        Faceted chart of boxplots for each non-binary feature.
     
     """
+    features = X_train.columns.to_list()
+    df_long = pd.melt(X_train, id_vars=["diabetes"], value_vars=features[:-1], var_name="feature", value_name="feature_value")
+    non_binary_features = ['BMI', 'GenHlth', 'MentHlth', 'PhysHlth', 'Age', 'Education', 'Income']
+    df_sample_nonbinary = df_long[df_long["feature"].isin(non_binary_features)]
+
+    chart = alt.Chart(df_sample_nonbinary,).mark_boxplot().encode(
+        x='diabetes:N',
+        y='feature_value:Q',
+        color='diabetes:N'
+    ).properties(
+        width = 65,
+        height = 300
+    ).facet(
+        column='feature:N'
+    ).properties(
+        title ='Boxplots for Non-Binary Features (Sample size n = 10000)'
+    ).resolve_scale(
+        y="independent"
+    )
+    return chart
+
 
 def eda_correlation(X_train):
     """
@@ -259,6 +266,7 @@ plot_options = ["count", "boxplot", "histogram", "correlation"]
     default = None,
     help = f"Specify a specific directory to save the results to. If no option is specified the results will not be saved."
 )
+
 def run_eda_function(command: str, path = None):
     plot = None
     X_train,y_train = preprocess.load_and_split_file("data/clean/diabetes_clean_train.csv","train")
@@ -277,10 +285,13 @@ def run_eda_function(command: str, path = None):
         
         case "histogram":
             click.echo("Creating histograms of all features...") # Might be adjusted?
-        
+            plot = eda_histogram(X_train)
+
         case "boxplot":
-            click.echo("Creating boxplots of all non-binary features...")
-        
+            click.echo("Creating boxplots of all non-binary features from a random sample of 10000 observations...")
+            df_sample = X_train.sample(n=10000, random_state=522)
+            plot = eda_boxplot(df_sample)
+
         case "correlation":
             click.echo("Creating feature-feature correlation plot on training data...")
             plot = eda_correlation(X_train)
@@ -289,13 +300,14 @@ def run_eda_function(command: str, path = None):
             click.echo(f"Creating and saving ALL EDA charts to directory {path}...")
             for po in plot_options:
                 run_eda_function(po,path)
-        
         case _:
             click.echo("Command is not recognized from the options ['describe', 'count', 'boxplot', 'histogram', 'correlation', 'saveallcharts'], no action performed")
             return
     
     click.echo(f"Command {command} compeleted as expected.")
-    if path != None and command != "saveallcharts": # saveallcharts has recursive behaviour
+
+    if path != None and command != "saveallcharts": # single option
+
         if command == "describe": # use csv format
             click.echo(f"Saving 3 EDA Dataframes to {path}...")
             describe_name = ["head","tail","describe"]
@@ -303,6 +315,7 @@ def run_eda_function(command: str, path = None):
                 click.echo(f"Saving the {describe_name[i]} DataFrame to {path}...")
                 save_dataframe(plot[i],"EDA_"+describe_name[i]+".csv",path)
             click.echo(f"All description DataFrames for the training data have been saved to {path}.")
+        
         else: # use png format
             click.echo(f"Saving plot to {path}...")
             save_figure(plot,"EDA_"+command+".png",path)
