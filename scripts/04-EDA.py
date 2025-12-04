@@ -83,36 +83,43 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
     return chart
 
 def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
-    """short_description
-    
-    longer_description
-    
-    Notes
-    -----
-    
+    """
+    Creates a set of histograms of all non-binary features in the training data set.
+
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
-    
+    X_train : pd.DataFrame
+        pd.DataFrame object containing the training data.
+
     Returns
     -------
-    int
-        description
-    
-    Examples
-    --------
-    >>> snake_case(a, b)
-    output
-    
-    Raises
-    --------
-    SomeError
-        when some error
-    
+    alt.Chart
+        Faceted chart of histograms for each non-binary feature.
     """
+    features = X_train.columns.to_list()
+    df_long = pd.melt(X_train, id_vars=["diabetes"], value_vars=features[:-1], var_name="feature", value_name="feature_value")
+    non_binary_features = ['BMI', 'GenHlth', 'MentHlth', 'PhysHlth', 'Age', 'Education', 'Income']
+    df_sample_nonbinary = df_long[df_long["feature"].isin(non_binary_features)]
+
+    chart = alt.Chart(df_sample_nonbinary).mark_bar().encode(
+        x=alt.X("feature_value:O"), # Chose to use ordinal instead of quantitative because this works better for most features
+        y=alt.Y("count()", title="Count").stack(False),
+        color=alt.Color("diabetes:N"),
+    ).properties(
+        width=500,
+        height=150,
+    ).facet(
+        "feature:N",
+        columns=1,
+    ).resolve_scale(
+        x="independent",
+        y="independent",   
+    ).properties(
+        title='Histograms of Features',
+    )
+
+    return chart
+
 
 def eda_boxplot(X_train: pd.DataFrame) -> alt.Chart:
     """
@@ -266,7 +273,6 @@ plot_options = ["count", "boxplot", "histogram", "correlation"]
     default = None,
     help = f"Specify a specific directory to save the results to. If no option is specified the results will not be saved."
 )
-
 def run_eda_function(command: str, path = None):
     plot = None
     X_train,y_train = preprocess.load_and_split_file("data/clean/diabetes_clean_train.csv","train")
@@ -285,6 +291,7 @@ def run_eda_function(command: str, path = None):
         
         case "histogram":
             click.echo("Creating histograms of all features...") # Might be adjusted?
+            #df_sample = X_train.sample(n=1000, random_state=522)
             plot = eda_histogram(X_train)
 
         case "boxplot":
