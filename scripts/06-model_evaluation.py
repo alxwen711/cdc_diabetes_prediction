@@ -1,10 +1,14 @@
 """
-04-evaluate_model.py
+06-evaluate_model.py
 Purpose:
     Load the final processed test set (X_test, y_test) produced by 03-split_preprocess_data.py
     and provide reusable utilities for model evaluation and visualisation.
     Current features:
         • load_test_data() - safely loads X_test and y_test
+        • load_pickle_models() - loads both trained models from disk
+        • plot_bar() - creates a bar chart comparing model performance metrics
+        • plot_confusion_matrix() - plots confusion matrix for a given model
+        • create_score_table() - creates a DataFrame summarizing model performance metrics
         • save_figure() - saves Altair charts with consistent logging
     Designed to be run from the project root.
 """
@@ -15,7 +19,7 @@ import pickle
 import pandas as pd
 import altair as alt
 from sklearn.metrics import (
-    accuracy_score, make_scorer, fbeta_score, 
+    accuracy_score, fbeta_score, 
     recall_score, precision_score, ConfusionMatrixDisplay
 )
 
@@ -170,6 +174,7 @@ def plot_bar(score_df: pd.DataFrame) -> alt.Chart:
     ).properties(
         title='Decision Tree vs Naive Bayes Performance on Test Set'
     )
+    return bar_plot
     
 # Confusion matrix for best model (decision tree)
 def plot_confusion_matrix(tree_model: object, X_test: pd.DataFrame, y_test: pd.Series) -> None:
@@ -190,12 +195,13 @@ def plot_confusion_matrix(tree_model: object, X_test: pd.DataFrame, y_test: pd.S
     >>> plot_confusion_matrix(tree_model, X_test, y_test)
     """
 
-    ConfusionMatrixDisplay.from_estimator(
+    cm = ConfusionMatrixDisplay.from_estimator(
         tree_model,
         X_test,
         y_test,
         values_format="d",
     )
+    return cm.figure_
 
 def create_score_table(X_test: pd.DataFrame, y_test: pd.Series, 
                        best_tree: object, best_nb: object)-> pd.DataFrame:
@@ -239,14 +245,22 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     >>> save_figure(plot,"count.png","img")
     """
     
-    if filepath == None: filepath = "img"
+    if filepath is None:
+        filepath = "img"
 
-    # check if folder exists
-    if not os.path.exists(filepath):
-        os.makedirs(filepath)
+    os.makedirs(filepath, exist_ok=True)
+    full_path = os.path.join(filepath, filename)
 
-    # Save Raw Data
-    plot.save(os.path.join(filepath,filename))
+    # Altair chart → .save()
+    if isinstance(plot, alt.Chart):
+        plot.save(full_path)
+    # Matplotlib Figure → plt.savefig()
+    else:
+        import matplotlib.pyplot as plt
+        plt.savefig(full_path, bbox_inches="tight")
+        plt.close(plot)   # prevent the figure from staying in memory
+
+    click.echo(f"Saved -> {full_path}")
 
 
 @click.command()
@@ -286,6 +300,8 @@ def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
     score_table = create_score_table(X_test, y_test, tree_model, nb_model)
     bar_plot = plot_bar(score_table)
     cm = plot_confusion_matrix(tree_model, X_test, y_test)
+    save_figure(bar_plot, "model_performance_comparison.png", filepath=img_dir)
+    save_figure(cm, "confusion_matrix.png", filepath=img_dir)
    
     click.echo("\nAll data and models loaded successfully!")
     click.echo(f"-> Test set: {X_test.shape[0]:,} samples")
