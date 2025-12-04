@@ -14,7 +14,10 @@ import click
 import pickle
 import pandas as pd
 import altair as alt
-
+from sklearn.metrics import (
+    accuracy_score, make_scorer, fbeta_score, 
+    recall_score, precision_score, ConfusionMatrixDisplay
+)
 
 def load_test_data(
     x_path: str = "data/processed/diabetes_X_test.csv",
@@ -138,50 +141,57 @@ def load_pickle_models(
    
     return tree_model, nb_model
 
-def save_figure(
-    plot: alt.Chart,
-    filename: str,
-    output_dir: str = "img"
-) -> None:
+def create_score_table(X_test: pd.DataFrame, y_test: pd.Series, 
+                       best_tree: object, best_nb: object)-> pd.DataFrame:
+    models = {
+    'Decision Tree': best_tree,
+    'Naive Bayes': best_nb
+}
+
+    results = []
+
+    for name, model in models.items():
+        y_pred = model.predict(X_test)
+        
+        results.append({
+            'Model': name,
+            'Test Accuracy': round(accuracy_score(y_test, y_pred),3),
+            'Test f2-score': round(fbeta_score(y_test, y_pred, beta=2),3),
+            'Test recall': round(recall_score(y_test, y_pred),3),
+            'Test precision': round(precision_score(y_test, y_pred),3),
+        })
+    return pd.DataFrame(results)
+
+def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     """
-    Save an Altair chart to the specified directory.
-   
+    Saves a Altair Chart created from a previous EDA function to the given path under a specified name.
+    
     Parameters
     ----------
-    plot : alt.Chart
-        The Altair chart object to save
-    filename : str
-        Name of the output file (e.g. "roc_curve.png")
-    output_dir : str, default "img"
-        Directory where the figure will be saved.
-        Created automatically if it doesn't exist.
-   
-    Returns
-    -------
-    None
-        Chart is written to disk
-   
+    plot: alt.Chart
+        The Altair Chart created from a previous EDA function.
+    filename: str
+        The filename to save the image to.
+    filepath: str, default = "img"
+        The directory path to save the chart to. The default option
+        will save the plot to the `img` folder relative to the root 
+        directory, creating it if it does not currently exist.
+    
     Examples
     --------
-    >>> chart = alt.Chart(df).mark_bar().encode(...)
-    >>> save_figure(chart, "feature_importance.png")
-    >>> save_figure(chart, "confusion_matrix.png", "img/results")
-   
-    Raises
-    ------
-    OSError
-        If directory cannot be created or file cannot be written
+    >>> plot = alt.Chart(...)
+    >>> save_figure(plot,"count.png","img")
     """
-    """
-    Checks verified:
-    - Output directory is created if missing
-    - Full path is logged clearly
-    - Altair save() is used (handles HTML/PNG via vega)
-    """
-    os.makedirs(output_dir, exist_ok=True)
-    full_path = os.path.join(output_dir, filename)
-    plot.save(full_path)
-    click.echo(f"Chart saved → {full_path}")
+    
+    if filepath == None: filepath = "img"
+
+    # check if folder exists
+    
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    # Save Raw Data
+    plot.save(os.path.join(filepath,filename))
 
 
 @click.command()
@@ -218,11 +228,12 @@ def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
    
     # Load models
     tree_model, nb_model = load_pickle_models(model_dir=model_dir)
+    score_table = create_score_table(X_test, y_test, tree_model, nb_model)
    
     click.echo("\nAll data and models loaded successfully!")
     click.echo(f"-> Test set: {X_test.shape[0]:,} samples")
     click.echo("-> Models: Decision Tree and Naive Bayes ready")
-
+    # click.echo("\n Model Performance Summary:",score_table.to_string(index=False))
 
 
 if __name__ == "__main__":
