@@ -8,46 +8,29 @@ of the decision tree model (the better model) will be saved.
 
 # imports
 import pandas as pd
-
-
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer, fbeta_score
 import os
 
+# functions
+def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionTreeClassifier:
+    """Fit a decision tree model on training dataset to predict diabetes.
+        
+    Uses grid search to find good hyperparameters.
 
-
-
-f2_scorer = make_scorer(fbeta_score, beta=2)
-
-###### TREE
-
-def fit_decision_tree(a: int, b: int = 0) -> int:
-    """short_description
-    
-    longer_description
-    
-    Notes
-    -----
-    
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
+    X_train : pd.Dataframe
+        Training dataset of model features.
+    y_train : pd.Datafram
+        Target values for training dataset.
     
     Returns
     -------
-    int
-        description
-    
-    Examples
-    --------
-    >>> snake_case(a, b)
-    output
-    
-    Raises
-    --------
-    SomeError
-        when some error
+    best_tree
+        The best decision free from grid search.
     
     """
 
@@ -58,10 +41,14 @@ def fit_decision_tree(a: int, b: int = 0) -> int:
         'min_samples_leaf': [175, 200, 225, 250]
     }
 
+    f2_scorer = make_scorer(fbeta_score, beta=2)
+
     tree_grid = GridSearchCV(tree, tree_params, cv=5, scoring=f2_scorer, n_jobs=1)
     tree_grid.fit(X_train, y_train)
 
     best_tree = tree_grid.best_estimator_
+
+    return best_tree
     
 
 
