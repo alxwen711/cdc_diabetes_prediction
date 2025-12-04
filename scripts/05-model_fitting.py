@@ -18,6 +18,29 @@ from sklearn.compose import make_column_transformer
 import os
 
 # functions
+def load_training_data(X_file: str, y_file) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load X_train and y_train csv files to pandas dataframes.
+        
+    Parameters
+    ----------
+    X_file : str
+        Path and filename of csv file with X train data.
+    y_file : str
+        Path and filename of csv file with y train data.
+    
+    Returns
+    -------
+    pd.Dataframe
+        X_train dataframe.
+    pd.Dataframe
+        y_train dataframe.
+    
+    """
+
+    X_train = pd.read_csv(X_file)
+    y_train = pd.read_csv(y_file)
+    return X_train, y_train
+
 def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionTreeClassifier:
     """Fit a decision tree model on training dataset to predict diabetes.
         
@@ -32,7 +55,7 @@ def fit_decision_tree(X_train: pd.DataFrame, y_train: pd.DataFrame) -> DecisionT
     
     Returns
     -------
-    best_tree
+    sklearn.tree.DecisionTreeClassifier
         The best decision free from grid search.
     
     """
@@ -67,7 +90,7 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.DataFrame):
     
     Returns
     -------
-    best_nb
+    sklearn.naive_bayes.BernoulliNB
         The best naive bayes model from grid search.
     
     """
@@ -92,3 +115,9 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.DataFrame):
 
     return best_nb
 
+
+def main():
+    
+
+if __name__ == "__main__":
+    main()
