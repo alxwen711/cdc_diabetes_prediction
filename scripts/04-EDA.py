@@ -63,11 +63,6 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
     -------
     alt.Chart
         Frequency bar graph of the labels.
-    
-    Examples
-    --------
-    >>> snake_case(a, b)
-    output
     """
     diabetes_count = pd.DataFrame(y_train.value_counts()).reset_index()
 
@@ -143,40 +138,39 @@ def eda_boxplot():
     
     """
 
-def eda_correlation():
-    """short_description
-    
-    longer_description
-    
-    Notes
-    -----
-    
+def eda_correlation(X_train):
+    """
+    Creates a feature-feature correlation heatmap of the training data set.
+
     Parameters
     ----------
-    a : int
-        description
-    b : int, optional (default = 0)
-        description
-    
+    X_train : pd.DataFrame
+        pd.DataFrame object containing the training data.
+
     Returns
     -------
-    int
-        description
-    
-    Examples
-    --------
-    >>> snake_case(a, b)
-    output
-    
-    Raises
-    --------
-    SomeError
-        when some error
-    
+    alt.Chart
+        Feature-feature correlation heatmap of the training data.
     """
+    correlation_matrix = X_train.corr()
+    correlation_long = correlation_matrix.reset_index().melt(id_vars='index')
+    correlation_long.columns = ['Feature 1', 'Feature 2', 'Correlation']
+
+    chart = alt.Chart(correlation_long).mark_rect().encode(
+        x='Feature 1:O',
+        y='Feature 2:O',
+        color=alt.Color('Correlation:Q', scale=alt.Scale(scheme='viridis')),
+        tooltip=['Feature 1', 'Feature 2', 'Correlation']
+    ).properties(
+        width=600,
+        height=600,
+        title="Correlation Heatmap"
+    )
+    return chart
 
 
-def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
+
+def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figures"):
     """
     Saves a Altair Chart created from a previous EDA function to the given path under a specified name.
     
@@ -196,8 +190,8 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     >>> plot = alt.Chart(...)
     >>> save_figure(plot,"count.png","img")
     """
-    
-    if filepath == None: filepath = "img"
+
+    if filepath == None: filepath = "results/figures"
 
     # check if folder exists
     
@@ -265,9 +259,14 @@ def run_eda_function(command: str, path = None):
     click.echo(f"Command {command} compeleted as expected.")
     if path != None and command in plot_options:
         click.echo(f"Saving plot to {path}...")
-        save_figure(plot,command+".png",path)
+        save_figure(plot,"EDA_"+command+".png",path)
         click.echo(f"Plot has been saved to {path}.")
 
+"""
+TODO PART 2:
+
+The quarto is basically meant to pull the files/tables with all code generating everything as needed
+"""
 
 if __name__ == "__main__":
     run_eda_function()
