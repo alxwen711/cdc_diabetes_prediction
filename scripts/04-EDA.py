@@ -117,7 +117,7 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
 def eda_boxplot(X_train: pd.DataFrame) -> alt.Chart:
     """
     Creates a set of boxplots of all non-binary features in the training data set.
-    A random sample of 10000 observations is used for generating these plots due to
+    A random sample of 1000 observations is used for generating these plots due to
     program runtime constraints and to not oversatuarate the box plots.
 
     Parameters
@@ -146,7 +146,7 @@ def eda_boxplot(X_train: pd.DataFrame) -> alt.Chart:
     ).facet(
         column='feature:N'
     ).properties(
-        title ='Boxplots for Non-Binary Features (Sample size n = 10000)'
+        title ='Boxplots for Non-Binary Features (Sample size n = 1000)'
     ).resolve_scale(
         y="independent"
     )
@@ -289,7 +289,7 @@ def run_eda_function(command: str, path = None):
 
         case "boxplot":
             click.echo("Creating boxplots of all non-binary features from a random sample of 10000 observations...")
-            df_sample = X_train.sample(n=10000, random_state=522)
+            df_sample = X_train.sample(n=1000, random_state=522)
             plot = eda_boxplot(df_sample)
 
         case "correlation":
