@@ -7,7 +7,7 @@ import os
 preprocess_name = "03-split_preprocess_data"
 preprocess = __import__(preprocess_name)
 
-def eda_describe(df):
+def eda_describe(df: pd.DataFrame) -> list:
     """Macro function to output the head, tail, and description (df.describe) of a DataFrame 
     representing the training data for EDA purposes
     
@@ -16,11 +16,18 @@ def eda_describe(df):
     df : pd.DataFrame
         Assummed training data
     
+    Returns
+    -------
+    List[pd.DataFrame]
+    List of 3 dataframes consisting of the head, tail, and description of the DataFrame.
+    
+    
     Examples
     --------
     >>> d = {'col1': [1, 2], 'col2': [3, 4]}
     >>> df = pd.DataFrame(data=d)
     >>> eda_describe(df)
+    
     
        col1  col2
     0     1     3
@@ -48,6 +55,7 @@ def eda_describe(df):
     print(df.tail())
     print("\nDescription of the training data:")
     print(df.describe())
+    return [df.head(), df.tail(), df.describe()]
     
 
 def eda_count(y_train: pd.Series) -> alt.Chart:
@@ -180,9 +188,9 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figure
         The Altair Chart created from a previous EDA function.
     filename: str
         The filename to save the image to.
-    filepath: str, default = "img"
+    filepath: str, default = "results/figures"
         The directory path to save the chart to. The default option
-        will save the plot to the `img` folder relative to the root 
+        will save the plot to the `results/figures` folder relative to the root 
         directory, creating it if it does not currently exist.
     
     Examples
@@ -198,8 +206,38 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figure
     if not os.path.exists(filepath):
         os.makedirs(filepath)
 
-    # Save Raw Data
+    # Save Plot
     plot.save(os.path.join(filepath,filename))
+
+def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tables"):
+    """
+    Saves a Pandas DataFrame created from a previous EDA function to the given path under a specified name.
+    
+    Parameters
+    ----------
+    df: pd.DataFrame
+        The Pandas Dataframe created from a previous EDA function.
+    filename: str
+        The filename to save the DataFrame to.
+    filepath: str, default = "results/tables"
+        The directory path to save the chart to. The default option
+        will save the plot to the `results/tables` folder relative to the root 
+        directory, creating it if it does not currently exist.
+    
+    Examples
+    --------
+    >>> df = alt.Chart(...)
+    >>> save_figure(df,"EDA.csv","dataframes")
+    """
+    if filepath == None: filepath = "results/tables"
+
+    # check if folder exists
+    
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    # Save Raw Data
+    df.to_csv(os.path.join(filepath,filename),index = True)
 
 
 command_options = ['describe', 'count', 'histogram', 'boxplot', 'correlation', 'saveallcharts']
@@ -219,7 +257,7 @@ plot_options = ["count", "boxplot", "histogram", "correlation"]
     "-p",
     type = str,
     default = None,
-    help = f"Specify a specific directory to save a generated image to if the EDA command is among the following: \n {plot_options} \n 'saveallcharts' (special command that does all of the above in one query)"
+    help = f"Specify a specific directory to save the results to. If no option is specified the results will not be saved."
 )
 def run_eda_function(command: str, path = None):
     plot = None
@@ -231,7 +269,7 @@ def run_eda_function(command: str, path = None):
         
         case "describe":
             click.echo("Printing description of training data...")
-            eda_describe(train_df)
+            plot = eda_describe(train_df)
         
         case "count":
             click.echo("Creating basic bar plot for count of target labels...")
@@ -257,10 +295,18 @@ def run_eda_function(command: str, path = None):
             return
     
     click.echo(f"Command {command} compeleted as expected.")
-    if path != None and command in plot_options:
-        click.echo(f"Saving plot to {path}...")
-        save_figure(plot,"EDA_"+command+".png",path)
-        click.echo(f"Plot has been saved to {path}.")
+    if path != None and command != "saveallcharts": # saveallcharts has recursive behaviour
+        if command == "describe": # use csv format
+            click.echo(f"Saving 3 EDA Dataframes to {path}...")
+            describe_name = ["head","tail","describe"]
+            for i in range(3):
+                click.echo(f"Saving the {describe_name[i]} DataFrame to {path}...")
+                save_dataframe(plot[i],"EDA_"+describe_name[i]+".csv",path)
+            click.echo(f"All description DataFrames for the training data have been saved to {path}.")
+        else: # use png format
+            click.echo(f"Saving plot to {path}...")
+            save_figure(plot,"EDA_"+command+".png",path)
+            click.echo(f"Plot has been saved to {path}.")
 
 """
 TODO PART 2:
