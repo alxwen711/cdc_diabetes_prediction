@@ -1,0 +1,6 @@
+```{python}
+#| label: tbl-head
+#| tbl-cap: First few rows of the training data.
+head_df = pd.read_csv("../results/tables/EDA_head.csv")
+Markdown(head_df.to_markdown(index = True))
+```
