@@ -262,6 +262,35 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
 
     click.echo(f"Saved -> {full_path}")
 
+def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tables"):
+    """
+    Saves a Pandas DataFrame created from a previous EDA function to the given path under a specified name.
+    
+    Parameters
+    ----------
+    df: pd.DataFrame
+        The Pandas Dataframe created from a previous EDA function.
+    filename: str
+        The filename to save the DataFrame to.
+    filepath: str, default = "results/tables"
+        The directory path to save the chart to. The default option
+        will save the plot to the `results/tables` folder relative to the root 
+        directory, creating it if it does not currently exist.
+    
+    Examples
+    --------
+    >>> df = alt.Chart(...)
+    >>> save_figure(df,"EDA.csv","dataframes")
+    """
+    if filepath == None: filepath = "results/tables"
+
+    # check if folder exists
+    
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    # Save Raw Data
+    df.to_csv(os.path.join(filepath,filename),index = True)
 
 @click.command()
 @click.option(
@@ -302,6 +331,7 @@ def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
     cm = plot_confusion_matrix(tree_model, X_test, y_test)
     save_figure(bar_plot, "model_performance_comparison.png", filepath=img_dir)
     save_figure(cm, "confusion_matrix.png", filepath=img_dir)
+    save_dataframe(score_table, "model_scores.csv")
    
     click.echo("\nAll data and models loaded successfully!")
     click.echo(f"-> Test set: {X_test.shape[0]:,} samples")
