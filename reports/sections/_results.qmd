@@ -1,0 +1,38 @@
+# Results {#sec-results}
+
+## Model Performance Overview
+
+Our analysis evaluated two machine learning models on the CDC diabetes prediction task: Decision Tree and Naive Bayes classifiers.
+
+```{python}
+#| label: load-evaluation-functions
+#| echo: false
+#| include: false
+
+# Import functions from your script
+import sys
+import os
+sys.path.append(os.path.join(os.getcwd(), 'scripts'))
+
+from model_evaluation_06 import (
+    load_test_data, 
+    load_pickle_models, 
+    create_score_table, 
+)
+
+# Load data and models
+X_test, y_test = load_test_data()
+tree_model, nb_model = load_pickle_models()
+```
+
+```{python}
+#| label: tbl-model-performance
+#| tbl-cap: "Model Performance Comparison on Test Set"
+#| echo: false
+
+# Create and display the performance table
+score_table = create_score_table(X_test, y_test, tree_model, nb_model)
+score_table
+```
+
+As shown in @tbl-model-performance, the Decision Tree model achieved an accuracy of `{python} f"{score_table. loc[0, 'Test Accuracy']:.3f}"` compared to the Naive Bayes model's accuracy of `{python} f"{score_table.loc[1, 'Test Accuracy']:. 3f}"`.
