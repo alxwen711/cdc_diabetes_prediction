@@ -117,8 +117,8 @@ def load_pickle_models(
     pickle.UnpicklingError
         If model file is corrupted
     """
-    tree_path = os.path.join(model_dir, "tree_model.pkl")
-    nb_path = os.path.join(model_dir, "naive_bayes_model.pkl")
+    tree_path = os.path.join(model_dir, "tree_model.pickle")
+    nb_path = os.path.join(model_dir, "naive_bayes_model.pickle")
    
     missing = []
     if not os.path.exists(tree_path):
@@ -280,7 +280,7 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
     "--model-dir",
     type=str,
     default="results/models",
-    help="Directory containing tree_model.pkl and naive_bayes_model.pkl"
+    help="Directory containing tree_model.pickle and naive_bayes_model.pickle"
 )
 @click.option(
     "--img-dir",
