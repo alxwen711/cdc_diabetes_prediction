@@ -119,6 +119,115 @@ div.csl-indent {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>This analysis was performed in Python 3.11.6 <span class="citation" data-cites="pythondocs">(<a href="#ref-pythondocs" role="doc-biblioref"><em>Python 3.11.6 Documentation</em> 2021-2025</a>)</span>. Additionally, here is a list of the Python packages used within the analysis with brief explanation:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 32%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Package</th>
+<th style="text-align: left;">Version</th>
+<th style="text-align: left;">Use case</th>
+<th style="text-align: left;">Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>numpy</code></td>
+<td style="text-align: left;"><code>1.26.4</code></td>
+<td style="text-align: left;">General analysis use</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>pandas</code></td>
+<td style="text-align: left;"><code>2.1.2</code></td>
+<td style="text-align: left;">Data management</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>pandera</code></td>
+<td style="text-align: left;"><code>0.27.0</code></td>
+<td style="text-align: left;">Data valiadion</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>altair</code></td>
+<td style="text-align: left;"><code>5.1.2</code></td>
+<td style="text-align: left;">Generating plots</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>scikit-learn</code></td>
+<td style="text-align: left;"><code>1.3.2</code></td>
+<td style="text-align: left;">Model creation and evaluation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>ucimlrepo</code></td>
+<td style="text-align: left;"><code>0.0.7</code></td>
+<td style="text-align: left;">Data extraction</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>deepchecks</code></td>
+<td style="text-align: left;"><code>0.18.1</code></td>
+<td style="text-align: left;">Data validation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>click</code></td>
+<td style="text-align: left;"><code>8.3.1</code></td>
+<td style="text-align: left;">Script tool</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>quarto</code></td>
+<td style="text-align: left;"><code>1.8.26</code></td>
+<td style="text-align: left;">Report creation</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>tabulate</code></td>
+<td style="text-align: left;"><code>0.9.0</code></td>
+<td style="text-align: left;">Table formatting</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>conda-lock</code></td>
+<td style="text-align: left;"><code>3.0.4</code></td>
+<td style="text-align: left;">Environment/Docker image management</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>requests</code></td>
+<td style="text-align: left;"><code>2.31.0</code></td>
+<td style="text-align: left;">Environment/Docker image management</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>jupyterlab</code></td>
+<td style="text-align: left;"><code>4.5.0</code></td>
+<td style="text-align: left;">Part of the Docker Image setup</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>jupyter_contrib_nbextensions</code></td>
+<td style="text-align: left;"><code>4.5.0</code></td>
+<td style="text-align: left;">Part of the Docker Image setup</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>ipykernel</code></td>
+<td style="text-align: left;"><code>6.26.0</code></td>
+<td style="text-align: left;">Part of the Docker Image setup</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
 <section id="modeling-approach" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-approach">Modeling Approach</h3>
 </section>
@@ -894,6 +1003,9 @@ Figure&nbsp;5: Feature-feature correlation plot of all features.
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-kagglediabetes" class="csl-entry" role="listitem">
 Dane, Sohier, and Alex Teboul. 2021. <span>“Diabetes Health Indicators Dataset.”</span> <a href="https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data" class="uri">https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data</a>; Center of Disease Control.
+</div>
+<div id="ref-pythondocs" class="csl-entry" role="listitem">
+<em>Python 3.11.6 Documentation</em>. 2021-2025. <a href="https://docs.python.org/release/3.11.6/reference/index.html">https://docs.python.org/release/3.11.6/reference/index.html</a>.
 </div>
 <div id="ref-usarenal" class="csl-entry" role="listitem">
 Rios, Nilka Burrows, Isreal Hora, Linda S. Geiss, Edward W. Gregg, and Ann Albright. 2017. <span>“Incidence of End-Stage Renal Disease Attributed to Diabetes Among Persons with Diagnosed Diabetes — United States and Puerto Rico.”</span> <em>Incidence of End-Stage Renal Disease Attributed to Diabetes Among Persons with Diagnosed Diabetes — United States and Puerto Rico</em>, no. 66(43): 1165–70.
