@@ -6,6 +6,9 @@ format:
     pdf:
         toc: true
         toc-depth: 2
+    html:
+        toc: true
+        toc-depth: 2
 bibliography: references.bib
 execute:
   echo: false

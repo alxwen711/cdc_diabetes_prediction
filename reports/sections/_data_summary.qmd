@@ -1,6 +1,33 @@
+
+First, here is a sample of the training data showing the first few entries and last few entries in the dataset in @tbl-head and @tbl-tail.
+
 ```{python}
 #| label: tbl-head
 #| tbl-cap: First few rows of the training data.
 head_df = pd.read_csv("../results/tables/EDA_head.csv")
 Markdown(head_df.to_markdown(index = True))
 ```
+
+
+```{python}
+#| label: tbl-tail
+#| tbl-cap: Last few rows of the training data.
+tail_df = pd.read_csv("../results/tables/EDA_tail.csv")
+Markdown(tail_df.to_markdown(index = True))
+```
+
+All features of the dataset are numeric, and further EDA shows there are no null values in the dataset.
+
+```{python}
+#| label: tbl-describe
+#| tbl-cap: Description of the training data.
+describe_df = pd.read_csv("../results/tables/EDA_describe.csv")
+Markdown(describe_df.to_markdown(index = True))
+```
+
+@tbl-describe displays a numerical distribution of the dataset. Most features are binary in nature, with the exceptions of  To better visualize we then plotted frequency counts of the target labels:
+
+
+
+
+
