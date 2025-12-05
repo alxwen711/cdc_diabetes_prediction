@@ -285,7 +285,7 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "img"):
 @click.option(
     "--img-dir",
     type=str,
-    default="img",
+    default="results/figure",
     help="Directory for saving evaluation plots"
 )
 def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
