@@ -20,7 +20,6 @@ There is a significant variance in the distributions of the binary features; `Sm
 
 ![Boxplots of the non-binary numeric features.](../results/figures/EDA_boxplot.png){#fig-boxplot width=100%}
 
-![Frequency bar graphs of the binary features.](../results/figures/EDA_binary.png){#fig-binary width=100%}
 
 @fig-boxplot takes a random sample of 1000 observations so that the boxplot is not overly populated and that the density of the points visibly correlates with @fig-histogram more closely. From analyzing both charts, we can make the following brief observations about each non-binary feature:   
 
