@@ -55,7 +55,7 @@ def eda_describe(df: pd.DataFrame) -> list:
     print(df.tail())
     print("\nDescription of the training data:")
     print(df.describe())
-    return [df.head(), df.tail(), df.describe()]
+    return [df.head(), df.tail(), df.describe().round(4)] # avoid long decimals from messing up pdf format
     
 
 def eda_count(y_train: pd.Series) -> alt.Chart:
@@ -306,7 +306,8 @@ def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tab
         os.makedirs(filepath)
 
     # Save Raw Data
-    df.to_csv(os.path.join(filepath,filename),index = False)
+    if filename == "EDA_describe.csv": df.to_csv(os.path.join(filepath,filename),index = True) # index is needed for description
+    else: df.to_csv(os.path.join(filepath,filename),index = False) # index should be removed for examples
 
 
 command_options = ['describe', 'count', 'histogram', 'binary', 'boxplot', 'correlation', 'saveallcharts']
