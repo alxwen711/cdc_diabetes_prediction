@@ -5,11 +5,11 @@ jupyter: python3
 format:
     pdf:
         toc: true
-        toc-depth: 2
+        toc-depth: 3
         fig-pos: H
     html:
         toc: true
-        toc-depth: 2
+        toc-depth: 3
         fig-pos: H
 bibliography: references.bib
 execute:
@@ -27,13 +27,15 @@ execute:
 
 ## Methods
 
+### Packages
+
 {{< include sections/_methods.qmd >}}
 
-## Modeling Approach
+### Modeling Approach
 
 {{< include sections/_modeling_approach.qmd >}}
 
-## Modeling Results
+## Results
 
 {{< include sections/_results.qmd >}}
 
@@ -51,11 +53,11 @@ execute:
 
 ## Modeling
 
-### Classification Analysis
+### Modeling Approach
 
-{{< include sections/_classification_analysis.qmd >}}
+{{< include sections/_modeling_approach.qmd >}}
 
-### Result Visualizations
+### Modeling Results
 
 {{< include sections/_results_visualizations.qmd >}}
 
