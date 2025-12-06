@@ -94,7 +94,10 @@ conda-lock -k explicit --file environment.yml -p linux-64
 docker-compose up
 ```
 
-7. Within the terminal, run the following scripts to create all necessary files in the `results` folder:
+7. Within the terminal, make sure you are in the diabetes_prediction directory. If you are not, please run: `cd diabetes_prediction`
+
+Then run the following scripts to create all necessary files in the `results` folder:
+
 ```
 python scripts/01-download_extract.py
 
