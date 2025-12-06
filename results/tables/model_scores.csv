@@ -1,0 +1,3 @@
+,Model,Test Accuracy,Test f2-score,Test recall,Test precision
+0,Decision Tree,0.706,0.587,0.784,0.293
+1,Naive Bayes,0.814,0.46,0.489,0.373
