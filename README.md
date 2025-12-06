@@ -98,7 +98,7 @@ docker-compose up
 ```
 python scripts/01-download_extract.py
 
-python scripts/02-clean_transform_data.py # edit with exact command(s)
+python scripts/02-clean_transform.py # edit with exact command(s)
 
 python scripts/03-split_preprocess_data.py # edit with exact command(s)
 
