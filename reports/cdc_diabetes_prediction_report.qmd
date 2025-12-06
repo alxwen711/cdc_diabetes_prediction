@@ -10,6 +10,7 @@ format:
     html:
         toc: true
         toc-depth: 2
+        fig-pos: H
 bibliography: references.bib
 execute:
   echo: false
@@ -28,11 +29,11 @@ execute:
 
 {{< include sections/_methods.qmd >}}
 
-### Modeling Approach
+## Modeling Approach
 
 {{< include sections/_modeling_approach.qmd >}}
 
-### Results
+## Modeling Results
 
 {{< include sections/_results.qmd >}}
 

@@ -38,8 +38,3 @@ Most importantly, with all of the varying scales these features are on, it indic
 
 Lastly with @fig-correlation, the main observation is that the strongest non-trivial feature-feature correlation does not exceed an absolute magnitued of 0.7. There are several significantly positively correlated feature pairs (`PhysHlth`-`GenHlth`, `PhysHlth`-`DiffWalk`, `Income`-`Education`, `GenHlth`-`DiffWalk`) and several significantly negative correlated feature pairs (`DiffWalk-Income`, `GenHlth-Income`). Noticably, `Income`, `DiffWalk`, and `GenHlth` appear in both the most positively and most negatively correlated feature pairs and have higher overall correlations with other features compared to other features such as `Sex`, `Smoker`, `Stroke`, and `Veggies` from the overall darker shades of green and orange in the correlation heatmap. With the `diabetes` feature, it is most positively correlated with `GenHlth` and most negatively correlated with `Income`.
 
-
-
-
-
-

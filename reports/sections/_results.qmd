@@ -1,0 +1,10 @@
+```{python}
+import pandas as pd
+```
+
+```{python}
+#| label: tbl-model_scores
+#| tbl-cap: Scores for models.
+scores = pd.read_csv("../results/tables/model_scores.csv")
+Markdown(scores.to_markdown(index = False))
+```
