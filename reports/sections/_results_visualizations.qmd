@@ -1,3 +1,21 @@
+## Model Performance Comparison
+
+The following table summarizes the performance metrics for our two models evaluated on the test set:
+
+```{python}
+#| label: tbl-performance-metrics
+#| tbl-cap: "Comparison of model performance metrics on the test set"
+#| echo: false
+
+import pandas as pd
+from IPython.display import Markdown
+
+table_to_display = pd.read_csv("../../results/tables/model_scores.csv")
+Markdown(table_to_display.to_markdown(index=False))
+```
+
+As shown in @tbl-performance-metrics, the Decision Tree model demonstrates superior performance across all evaluation metrics compared to the Naive Bayes model. The Decision Tree achieves higher accuracy, f2-score, recall, and precision scores, making it the optimal choice for our diabetes prediction task.
+
 ## Performance Visualization
 
 ![Comparison of model performance metrics on the test set](../../results/figures/model_performance_comparison.png){#fig-performance-comparison}
