@@ -95,7 +95,6 @@ def split_dataset_and_validate(full_df: pd.DataFrame):
     test_df : pd.DataFrame
         The test split of full_df.
 
-
     Examples
     --------
     >>> split_dataset_and_validate(raw_data)
@@ -135,10 +134,6 @@ def save_clean_data(train_df: pd.DataFrame, test_df: pd.DataFrame, clean_data_pa
     train_df.to_csv(clean_data_path+"/diabetes_clean_train.csv", index=False)
     test_df.to_csv(clean_data_path+"/diabetes_clean_test.csv", index=False)
     
-
-### ADD CLEAN FILEPATH W DEFAULT
-### ADD FILENAME W DEFAULT
-
 # main function
 @click.command()
 @click.option("--file", type=str, default="data/raw/diabetes_raw.csv")
