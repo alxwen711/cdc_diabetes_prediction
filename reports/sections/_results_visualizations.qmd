@@ -1,4 +1,4 @@
-## Model Performance Comparison
+#### Performance Table
 
 The following table summarizes the performance metrics for our two models evaluated on the test set:
 
@@ -16,14 +16,14 @@ Markdown(table_to_display.to_markdown(index=False))
 
 As shown in @tbl-performance-metrics, the Decision Tree model demonstrates superior performance across all evaluation metrics compared to the Naive Bayes model. The Decision Tree achieves higher accuracy, f2-score, recall, and precision scores, making it the optimal choice for our diabetes prediction task.
 
-## Performance Visualization
+#### Performance Visualization
 
-![Comparison of model performance metrics on the test set](../results/figures/model_performance_comparison.png){#fig-performance-comparison}
+![Comparison of model performance metrics on the test set](../results/figures/model_performance_comparison.png){#fig-performance-comparison width=50%}
 
 The performance comparison in @fig-performance-comparison demonstrates that the Decision Tree model outperforms the Naive Bayes model across all evaluation metrics.
 
-## Confusion Matrix Analysis
+#### Confusion Matrix
 
-![Confusion matrix for the best performing model (Decision Tree)](../results/figures/confusion_matrix.png){#fig-confusion-matrix}
+![Confusion matrix for the best performing model (Decision Tree)](../results/figures/confusion_matrix.png){#fig-confusion-matrix width=50%}
 
 The confusion matrix in @fig-confusion-matrix shows the detailed classification performance of our best model. The model correctly identified a significant portion of the test cases, demonstrating strong predictive capability.
