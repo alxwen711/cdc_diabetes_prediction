@@ -96,7 +96,6 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.Series):
         The best naive bayes model from grid search.
     
     """
-
     preprocessor = make_column_transformer(
         (StandardScaler(), X_train.columns)
     )
@@ -162,7 +161,9 @@ def pickle_models(model, file_name: str) -> None:
 )
 def main(xfile: str, yfile: str):
     X_train, y_train = load_training_data(xfile, yfile)
+    print("Searching for best hyperparameters for decision tree classifier...")
     best_dt = fit_decision_tree(X_train, y_train)
+    print("Searching for best hyperparameters for naive bayes classifier...")
     best_nb = fit_naive_bayes(X_train, y_train)
     pickle_models(best_dt, "tree_model.pickle")
     pickle_models(best_nb, "naive_bayes_model.pickle")
