@@ -1,39 +1,9 @@
-
-
-![Frequency bar graph of the labels.](../results/figures/EDA_count.png){#fig-count width=100%}
-
-
-@fig-count
-
-
-
-![Frequency bar graphs of the binary features.](../results/figures/EDA_binary.png){#fig-binary width=100%}
-
-
-@fig-binary
-
-
-
-![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=100%}
-
-
-@fig-histogram
-
-
+![Frequency bar graph of the labels.](../results/figures/EDA_count.png){#fig-count width=40%}
 
 ![Boxplots of the non-binary numeric features.](../results/figures/EDA_boxplot.png){#fig-boxplot width=100%}
 
+![Frequency bar graphs of the binary features.](../results/figures/EDA_binary.png){#fig-binary width=100%}
 
-@fig-boxplot
-
+![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=100%}
 
 ![Feature-feature correlation plot of all features.](../results/figures/EDA_correlation.png){#fig-correlation width=100%}
-
-
-@fig-correlation
-
-
-
-
-
-
