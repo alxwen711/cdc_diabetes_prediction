@@ -94,7 +94,7 @@ conda-lock -k explicit --file environment.yml -p linux-64
 docker-compose up
 ```
 
-7. Within the terminal, run the following scripts:
+7. Within the terminal, run the following scripts to create all necessary files in the `results` folder:
 ```
 python scripts/01-download_extract.py
 
@@ -109,6 +109,18 @@ python scripts/05-model_fitting.py # edit with exact command(s)
 
 python scripts/06-model_evaluation.py # edit with exact command(s)
 ```
+
+8. Then use the following command to generate the report in both HTML and PDF format:
+```
+quarto render reports/cdc_diabetes_prediction_report.qmd
+```
+
+If the PDF format results in an error similar to [Issue #48](https://github.com/alxwen711/cdc_diabetes_prediction/issues/48#issue-3700114411), run this command first to ensure the fonts can be loaded properly:
+
+```
+quarto install tinytex
+```
+
 
 ## References and Acknowledgements
 
