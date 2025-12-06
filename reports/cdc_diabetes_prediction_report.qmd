@@ -53,11 +53,11 @@ execute:
 
 ## Modeling
 
-### Modeling Approach
+### Model Fitting
 
 {{< include sections/_modeling_approach.qmd >}}
 
-### Modeling Results
+### Results
 
 {{< include sections/_results_visualizations.qmd >}}
 
