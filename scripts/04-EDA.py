@@ -149,20 +149,27 @@ def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
     alt.Chart
         Faceted chart of bar plots for each binary feature.
     """
+    
+    # obtain only binary features
     features = X_train.columns.to_list()
     df_long = pd.melt(X_train, id_vars=["diabetes"], value_vars=features[:-1], var_name="feature", value_name="feature_value")
     binary_features = ["HighBP","HighChol","CholCheck","Smoker","Stroke","HeartDiseaseorAttack","PhysActivity",
                 "Fruits","Veggies","HvyAlcoholConsump","AnyHealthcare",
                 "NoDocbcCost","DiffWalk","Sex"]
     df_sample_binary = df_long[df_long["feature"].isin(binary_features)]
+    
+    # reduce to counts of binary features
     df_sample_binary["label"] = df_sample_binary.apply(generate_label, axis = 1)
+    df_sample_binary = df_sample_binary.value_counts().rename("count").reset_index()
+    
+    # make the chart
     chart = alt.Chart(df_sample_binary).mark_bar().encode(
-        x=alt.Y("count()", title="Count").stack(False),
+        x=alt.Y("count", title="Count").stack(False),
         y=alt.X("label"), 
         color=alt.Color("diabetes:N"),
     ).properties(
         width=150,
-        height=150,
+        height=90,
     ).facet(
         "feature:N",
         columns=3,
@@ -352,7 +359,7 @@ def run_eda_function(command: str, path = None):
             plot = eda_binary(X_train)
         
         case "boxplot":
-            click.echo("Creating boxplots of all non-binary features from a random sample of 10000 observations...")
+            click.echo("Creating boxplots of all non-binary features from a random sample of 1000 observations...")
             df_sample = X_train.sample(n=1000, random_state=522)
             plot = eda_boxplot(df_sample)
 
