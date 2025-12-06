@@ -306,7 +306,7 @@ def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tab
         os.makedirs(filepath)
 
     # Save Raw Data
-    df.to_csv(os.path.join(filepath,filename),index = True)
+    df.to_csv(os.path.join(filepath,filename),index = False)
 
 
 command_options = ['describe', 'count', 'histogram', 'binary', 'boxplot', 'correlation', 'saveallcharts']

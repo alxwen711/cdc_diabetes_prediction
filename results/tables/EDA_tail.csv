@@ -1,6 +1,6 @@
-,HighBP,HighChol,CholCheck,BMI,Smoker,Stroke,HeartDiseaseorAttack,PhysActivity,Fruits,Veggies,HvyAlcoholConsump,AnyHealthcare,NoDocbcCost,GenHlth,MentHlth,PhysHlth,DiffWalk,Sex,Age,Education,Income,diabetes
-177571,1,1,1,29,0,0,0,1,1,1,0,1,0,2,0,2,0,0,4,6,5,0
-177572,1,0,1,22,0,0,0,0,1,1,0,1,0,3,0,0,1,0,13,4,1,0
-177573,0,1,1,25,1,0,0,1,1,1,0,1,0,2,0,0,0,1,6,5,7,0
-177574,0,1,1,24,1,0,0,1,1,1,0,1,0,3,2,1,0,0,4,4,8,0
-177575,1,1,1,31,1,0,0,0,1,1,0,1,0,2,0,2,0,0,8,4,4,0
+HighBP,HighChol,CholCheck,BMI,Smoker,Stroke,HeartDiseaseorAttack,PhysActivity,Fruits,Veggies,HvyAlcoholConsump,AnyHealthcare,NoDocbcCost,GenHlth,MentHlth,PhysHlth,DiffWalk,Sex,Age,Education,Income,diabetes
+1,1,1,29,0,0,0,1,1,1,0,1,0,2,0,2,0,0,4,6,5,0
+1,0,1,22,0,0,0,0,1,1,0,1,0,3,0,0,1,0,13,4,1,0
+0,1,1,25,1,0,0,1,1,1,0,1,0,2,0,0,0,1,6,5,7,0
+0,1,1,24,1,0,0,1,1,1,0,1,0,3,2,1,0,0,4,4,8,0
+1,1,1,31,1,0,0,0,1,1,0,1,0,2,0,2,0,0,8,4,4,0
