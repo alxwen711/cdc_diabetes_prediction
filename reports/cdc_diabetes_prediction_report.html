@@ -57,6 +57,35 @@ div.csl-indent {
 <link href="cdc_diabetes_prediction_report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="cdc_diabetes_prediction_report_files/libs/bootstrap/bootstrap-fc0e81308003d781c6fa911fdb61a094.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -115,7 +144,6 @@ div.csl-indent {
 <p>In Canada and the USA approximately 10% of people are living with diabetes. In Canada in 2023 approximately 3.7 million people were living with diabetes and in the USA in 2021 approzimately 38.4 million people were living with diabetes. (<span class="citation" data-cites="diabetescanada"><span>“Snapshot of Diabetes in Canada, 2023”</span> (<a href="#ref-diabetescanada" role="doc-biblioref">2023</a>)</span>) In the USA it is the 8th leading cause of death. (<span class="citation" data-cites="usarenal">Rios et al. (<a href="#ref-usarenal" role="doc-biblioref">2017</a>)</span>) Globally an estimated 44% of people living with diabetes are undiagnosed. (<span class="citation" data-cites="diabetescare">Stafford et al. (<a href="#ref-diabetescare" role="doc-biblioref">2025</a>)</span>)</p>
 <p>In this project we try to predicted diabetes disease based on common health factors. A reliable model could help to prescreen people and recommend following up with a physician for people who are at risk. Given the large number of people living with undiagnosed diabetes this could potentially have a significant positive impact of world health.</p>
 <p>The analysis uses the American CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). (<span class="citation" data-cites="kagglediabetes">Dane and Teboul (<a href="#ref-kagglediabetes" role="doc-biblioref">2021</a>)</span>)</p>
-<p>No missing values were present and all features were already encoded numerically. The target classes is imbalanced (≈86% non-diabetic, ≈14% diabetic).</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
@@ -203,681 +231,279 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="eda">EDA</h2>
 <section id="data-summary" class="level3">
 <h3 class="anchored" data-anchor-id="data-summary">Data Summary</h3>
-<p>First, here is a sample of the training data showing the first few entries and last few entries in the dataset in <a href="#tbl-head" class="quarto-xref">Table&nbsp;1</a> and <a href="#tbl-tail" class="quarto-xref">Table&nbsp;2</a>.</p>
 <div class="cell" data-execution_count="2">
-<div id="tbl-head" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: First few rows of the training data.
-</figcaption>
-<div aria-describedby="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="14">
-<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
-<colgroup>
-<col style="width: 1%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 2%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 8%">
-<col style="width: 5%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 7%">
-<col style="width: 5%">
-<col style="width: 5%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 2%">
-<col style="width: 2%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: right;"></th>
-<th style="text-align: right;">Unnamed: 0</th>
-<th style="text-align: right;">HighBP</th>
-<th style="text-align: right;">HighChol</th>
-<th style="text-align: right;">CholCheck</th>
-<th style="text-align: right;">BMI</th>
-<th style="text-align: right;">Smoker</th>
-<th style="text-align: right;">Stroke</th>
-<th style="text-align: right;">HeartDiseaseorAttack</th>
-<th style="text-align: right;">PhysActivity</th>
-<th style="text-align: right;">Fruits</th>
-<th style="text-align: right;">Veggies</th>
-<th style="text-align: right;">HvyAlcoholConsump</th>
-<th style="text-align: right;">AnyHealthcare</th>
-<th style="text-align: right;">NoDocbcCost</th>
-<th style="text-align: right;">GenHlth</th>
-<th style="text-align: right;">MentHlth</th>
-<th style="text-align: right;">PhysHlth</th>
-<th style="text-align: right;">DiffWalk</th>
-<th style="text-align: right;">Sex</th>
-<th style="text-align: right;">Age</th>
-<th style="text-align: right;">Education</th>
-<th style="text-align: right;">Income</th>
-<th style="text-align: right;">diabetes</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">23</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">28</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<div class="cell" data-execution_count="3">
-<div id="tbl-tail" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Last few rows of the training data.
-</figcaption>
-<div aria-describedby="tbl-tail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="15">
-<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
-<colgroup>
-<col style="width: 1%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 2%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 8%">
-<col style="width: 5%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 7%">
-<col style="width: 5%">
-<col style="width: 5%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 2%">
-<col style="width: 2%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: right;"></th>
-<th style="text-align: right;">Unnamed: 0</th>
-<th style="text-align: right;">HighBP</th>
-<th style="text-align: right;">HighChol</th>
-<th style="text-align: right;">CholCheck</th>
-<th style="text-align: right;">BMI</th>
-<th style="text-align: right;">Smoker</th>
-<th style="text-align: right;">Stroke</th>
-<th style="text-align: right;">HeartDiseaseorAttack</th>
-<th style="text-align: right;">PhysActivity</th>
-<th style="text-align: right;">Fruits</th>
-<th style="text-align: right;">Veggies</th>
-<th style="text-align: right;">HvyAlcoholConsump</th>
-<th style="text-align: right;">AnyHealthcare</th>
-<th style="text-align: right;">NoDocbcCost</th>
-<th style="text-align: right;">GenHlth</th>
-<th style="text-align: right;">MentHlth</th>
-<th style="text-align: right;">PhysHlth</th>
-<th style="text-align: right;">DiffWalk</th>
-<th style="text-align: right;">Sex</th>
-<th style="text-align: right;">Age</th>
-<th style="text-align: right;">Education</th>
-<th style="text-align: right;">Income</th>
-<th style="text-align: right;">diabetes</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">177571</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">29</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">177572</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">177573</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">177574</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">177575</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">0</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<p>All features of the dataset are numeric, and further EDA shows there are no null values in the dataset.</p>
-<div class="cell" data-execution_count="4">
-<div id="tbl-describe" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="4">
+<div id="tbl-describe" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3: Description of the training data.
+Table&nbsp;1: Description of the training data.
 </figcaption>
 <div aria-describedby="tbl-describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="16">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="11">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 1%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 6%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 5%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 4%">
+<col style="width: 28%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
 </colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: right;"></th>
-<th style="text-align: left;">Unnamed: 0</th>
-<th style="text-align: right;">HighBP</th>
-<th style="text-align: right;">HighChol</th>
-<th style="text-align: right;">CholCheck</th>
-<th style="text-align: right;">BMI</th>
-<th style="text-align: right;">Smoker</th>
-<th style="text-align: right;">Stroke</th>
-<th style="text-align: right;">HeartDiseaseorAttack</th>
-<th style="text-align: right;">PhysActivity</th>
-<th style="text-align: right;">Fruits</th>
-<th style="text-align: right;">Veggies</th>
-<th style="text-align: right;">HvyAlcoholConsump</th>
-<th style="text-align: right;">AnyHealthcare</th>
-<th style="text-align: right;">NoDocbcCost</th>
-<th style="text-align: right;">GenHlth</th>
-<th style="text-align: right;">MentHlth</th>
-<th style="text-align: right;">PhysHlth</th>
-<th style="text-align: right;">DiffWalk</th>
-<th style="text-align: right;">Sex</th>
-<th style="text-align: right;">Age</th>
-<th style="text-align: right;">Education</th>
-<th style="text-align: right;">Income</th>
-<th style="text-align: right;">diabetes</th>
-</tr>
-</thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">Unnamed: 0</td>
 <td style="text-align: left;">count</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-<td style="text-align: right;">177576</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">1</td>
 <td style="text-align: left;">mean</td>
-<td style="text-align: right;">0.42927</td>
-<td style="text-align: right;">0.422794</td>
-<td style="text-align: right;">0.96267</td>
-<td style="text-align: right;">28.385</td>
-<td style="text-align: right;">0.443348</td>
-<td style="text-align: right;">0.0407037</td>
-<td style="text-align: right;">0.094033</td>
-<td style="text-align: right;">0.756318</td>
-<td style="text-align: right;">0.635052</td>
-<td style="text-align: right;">0.812204</td>
-<td style="text-align: right;">0.0562914</td>
-<td style="text-align: right;">0.951283</td>
-<td style="text-align: right;">0.0845441</td>
-<td style="text-align: right;">2.51279</td>
-<td style="text-align: right;">3.18333</td>
-<td style="text-align: right;">4.25418</td>
-<td style="text-align: right;">0.168187</td>
-<td style="text-align: right;">0.440786</td>
-<td style="text-align: right;">8.03207</td>
-<td style="text-align: right;">5.04899</td>
-<td style="text-align: right;">6.05141</td>
-<td style="text-align: right;">0.139332</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">2</td>
 <td style="text-align: left;">std</td>
-<td style="text-align: right;">0.494973</td>
-<td style="text-align: right;">0.494005</td>
-<td style="text-align: right;">0.189571</td>
-<td style="text-align: right;">6.59164</td>
-<td style="text-align: right;">0.496782</td>
-<td style="text-align: right;">0.197603</td>
-<td style="text-align: right;">0.291875</td>
-<td style="text-align: right;">0.429304</td>
-<td style="text-align: right;">0.481417</td>
-<td style="text-align: right;">0.39055</td>
-<td style="text-align: right;">0.230484</td>
-<td style="text-align: right;">0.215277</td>
-<td style="text-align: right;">0.278203</td>
-<td style="text-align: right;">1.06849</td>
-<td style="text-align: right;">7.40563</td>
-<td style="text-align: right;">8.72484</td>
-<td style="text-align: right;">0.374033</td>
-<td style="text-align: right;">0.496483</td>
-<td style="text-align: right;">3.0558</td>
-<td style="text-align: right;">0.986348</td>
-<td style="text-align: right;">2.07293</td>
-<td style="text-align: right;">0.346294</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">3</td>
 <td style="text-align: left;">min</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">4</td>
 <td style="text-align: left;">25%</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">24</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">50%</td>
+<td style="text-align: left;">75%</td>
+<td style="text-align: left;">max</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">50%</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">27</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">HighBP</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.4293</td>
+<td style="text-align: left;">0.495</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">6</td>
-<td style="text-align: left;">75%</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">31</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">0</td>
+<td style="text-align: left;">HighChol</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.4228</td>
+<td style="text-align: left;">0.494</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">7</td>
-<td style="text-align: left;">max</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">98</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: left;">CholCheck</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.9627</td>
+<td style="text-align: left;">0.1896</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BMI</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">28.385</td>
+<td style="text-align: left;">6.5916</td>
+<td style="text-align: left;">12.0</td>
+<td style="text-align: left;">24.0</td>
+<td style="text-align: left;">27.0</td>
+<td style="text-align: left;">31.0</td>
+<td style="text-align: left;">98.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Smoker</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.4433</td>
+<td style="text-align: left;">0.4968</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stroke</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.0407</td>
+<td style="text-align: left;">0.1976</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HeartDiseaseorAttack</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.094</td>
+<td style="text-align: left;">0.2919</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PhysActivity</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.7563</td>
+<td style="text-align: left;">0.4293</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fruits</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.6351</td>
+<td style="text-align: left;">0.4814</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Veggies</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.8122</td>
+<td style="text-align: left;">0.3905</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HvyAlcoholConsump</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.0563</td>
+<td style="text-align: left;">0.2305</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AnyHealthcare</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.9513</td>
+<td style="text-align: left;">0.2153</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NoDocbcCost</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.0845</td>
+<td style="text-align: left;">0.2782</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GenHlth</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">2.5128</td>
+<td style="text-align: left;">1.0685</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">2.0</td>
+<td style="text-align: left;">2.0</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MentHlth</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">3.1833</td>
+<td style="text-align: left;">7.4056</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">2.0</td>
+<td style="text-align: left;">30.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PhysHlth</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">4.2542</td>
+<td style="text-align: left;">8.7248</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">3.0</td>
+<td style="text-align: left;">30.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DiffWalk</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.1682</td>
+<td style="text-align: left;">0.374</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.4408</td>
+<td style="text-align: left;">0.4965</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Age</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">8.0321</td>
+<td style="text-align: left;">3.0558</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">6.0</td>
+<td style="text-align: left;">8.0</td>
+<td style="text-align: left;">10.0</td>
+<td style="text-align: left;">13.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Education</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">5.049</td>
+<td style="text-align: left;">0.9863</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">4.0</td>
+<td style="text-align: left;">5.0</td>
+<td style="text-align: left;">6.0</td>
+<td style="text-align: left;">6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Income</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">6.0514</td>
+<td style="text-align: left;">2.0729</td>
+<td style="text-align: left;">1.0</td>
+<td style="text-align: left;">5.0</td>
+<td style="text-align: left;">7.0</td>
+<td style="text-align: left;">8.0</td>
+<td style="text-align: left;">8.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">diabetes</td>
+<td style="text-align: left;">177576.0</td>
+<td style="text-align: left;">0.1393</td>
+<td style="text-align: left;">0.3463</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">0.0</td>
+<td style="text-align: left;">1.0</td>
 </tr>
 </tbody>
 </table>
@@ -886,21 +512,226 @@ Table&nbsp;3: Description of the training data.
 </figure>
 </div>
 </div>
-<p><a href="#tbl-describe" class="quarto-xref">Table&nbsp;3</a> displays a numerical distribution of the dataset. Most features are binary in nature, with the exceptions of To better visualize we then plotted frequency counts of the target labels:</p>
+<p><a href="#tbl-describe" class="quarto-xref">Table&nbsp;1</a> displays a numerical distribution of the dataset, where as <a href="#tbl-head" class="quarto-xref">Table&nbsp;2</a> lists the first 5 rows transposed of the training dataset as example observations used. Both tables have been transposed from their original form for more syntactical presentation. All features of the dataset consist entirely of integer values, and by all <code>count</code> values being identically 177576 (the number of observations in the training dataset), there exist no null values, making the preprocessing step of the analysis relatively simple.</p>
+<div class="cell" data-execution_count="3">
+<div id="tbl-head" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: First few rows of the training data as example observations.
+</figcaption>
+<div aria-describedby="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="12">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">1</th>
+<th style="text-align: right;">2</th>
+<th style="text-align: right;">3</th>
+<th style="text-align: right;">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HighBP</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HighChol</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CholCheck</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BMI</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Smoker</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stroke</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HeartDiseaseorAttack</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PhysActivity</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fruits</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Veggies</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">HvyAlcoholConsump</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AnyHealthcare</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NoDocbcCost</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GenHlth</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MentHlth</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PhysHlth</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DiffWalk</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sex</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Age</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Education</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Income</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">diabetes</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
 </section>
 <section id="visualizations" class="level3">
 <h3 class="anchored" data-anchor-id="visualizations">Visualizations</h3>
 <div id="fig-count" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../results/figures/EDA_count.png" class="img-fluid figure-img" style="width:100.0%">
+<img src="../results/figures/EDA_count.png" class="img-fluid figure-img" style="width:40.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Frequency bar graph of the labels.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-count" class="quarto-xref">Figure&nbsp;1</a></p>
+<p>For this supervised learning problem, all observations are labelled as either 0, indicating a negative label for no diabetes, or 1, indicating a positive label for either diabetes or pre-diabetes. From <a href="#fig-count" class="quarto-xref">Figure&nbsp;1</a>, the class distribution is imbalanced with roughly 14% of observations labelled positive for diabetes. This motivates using F2 score as our metric; in this data, a false negative is more problematic than a false positive, thus recall rate is prioritized over precision rate. The exact equation for the F2 score used within model evaluation is as follows:</p>
+<p><span class="math display">\[F_2 = \frac{5*\text{precision}*\text{recall}}{(4*\text{precision}+\text{recall})}\]</span></p>
+<p>Continuing the EDA, <a href="#fig-binary" class="quarto-xref">Figure&nbsp;2</a> displays the distribution of all binary features, where the labels <code>f = a, d = b</code> <span class="math inline">\((a,b \in \{0,1\})\)</span> indicate the frequencey that an observation had value <code>a</code> in the given feature, and value <code>b</code> in the diabetes label.</p>
 <div id="fig-binary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -911,18 +742,17 @@ Figure&nbsp;2: Frequency bar graphs of the binary features.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-binary" class="quarto-xref">Figure&nbsp;2</a></p>
+<p>There is a significant variance in the distributions of the binary features; <code>Smoker</code> and <code>Sex</code> have similar number of observations where <code>f = 0</code> compared to <code>f = 1</code>, where as a feature like <code>Stroke</code> is heavily weighted to <code>f = 0</code>, indicating very few observations indicate they have had a stroke before. Due to the high number of observations in the dataset, even where there are imbalances, we can expect there to be enough observations with either a positive (<code>1</code>) or negative (<code>0</code>) value for any given binary feature that should prevent low sample size bias. <code>HighBP</code>, <code>HighChol</code>, and <code>Smoker</code> all have more observations with <code>f = 0</code> than <code>f = 1</code>, but in all of those features, the frequency of <code>f = 1, d = 1</code> labels exceed that of <code>f = 0, d = 1</code> labels, which indicate that we can expect that the model will indicate an association with these risks factors and a risk of diabetes.</p>
 <div id="fig-histogram" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../results/figures/EDA_histogram.png" class="img-fluid figure-img" style="width:100.0%">
+<img src="../results/figures/EDA_histogram.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Histograms of the non-binary numeric features.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-histogram" class="quarto-xref">Figure&nbsp;3</a></p>
 <div id="fig-boxplot" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-boxplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -933,7 +763,14 @@ Figure&nbsp;4: Boxplots of the non-binary numeric features.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-boxplot" class="quarto-xref">Figure&nbsp;4</a></p>
+<p><a href="#fig-boxplot" class="quarto-xref">Figure&nbsp;4</a> takes a random sample of 1000 observations so that the boxplot is not overly populated and that the density of the points visibly correlates with <a href="#fig-histogram" class="quarto-xref">Figure&nbsp;3</a> more closely. From analyzing both charts, we can make the following brief observations about each non-binary feature:</p>
+<ul>
+<li><p><code>Age</code> has been encoded to a 13-point scale that is somewhat normally distributed with a slight negative skew.</p></li>
+<li><p><code>BMI</code> is a normally distributed feature with several extreme upper outliers that go up to 98. A BMI of 98 for someone that is 5 feet tall would result in a weight of roughly 500 pounds <span class="citation" data-cites="bmi">Keys et al. (<a href="#ref-bmi" role="doc-biblioref">2014</a>)</span>, which is an outlier, but still reasonably possible that this is considered an accurate observation.</p></li>
+<li><p><code>Education</code> is on a 6-point scale, while <code>GenHlth</code> is on a 5-point scale. Both of these features have the option to be preprocessed categorically, but since these are ordinal in nature, using a standard scaler on these features is a reasonable option this analysis goes with.</p></li>
+<li><p><code>MentHlth</code> and <code>PhysHlth</code> have the majority of observations with a value of 0</p></li>
+</ul>
+<p>Most importantly, with all of the varying scales these features are on, it indicates that a <code>StandardScaler()</code> can be used on all numerical features to normalize the values of each feature into identical normal distributions.</p>
 <div id="fig-correlation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-correlation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -944,7 +781,7 @@ Figure&nbsp;5: Feature-feature correlation plot of all features.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-correlation" class="quarto-xref">Figure&nbsp;5</a></p>
+<p>Lastly with <a href="#fig-correlation" class="quarto-xref">Figure&nbsp;5</a>, the main observation is that the strongest non-trivial feature-feature correlation does not exceed an absolute magnitued of 0.7. There are several significantly positively correlated feature pairs (<code>PhysHlth</code>-<code>GenHlth</code>, <code>PhysHlth</code>-<code>DiffWalk</code>, <code>Income</code>-<code>Education</code>, <code>GenHlth</code>-<code>DiffWalk</code>) and several significantly negative correlated feature pairs (<code>DiffWalk-Income</code>, <code>GenHlth-Income</code>). Noticably, <code>Income</code>, <code>DiffWalk</code>, and <code>GenHlth</code> appear in both the most positively and most negatively correlated feature pairs and have higher overall correlations with other features compared to other features such as <code>Sex</code>, <code>Smoker</code>, <code>Stroke</code>, and <code>Veggies</code> from the overall darker shades of green and orange in the correlation heatmap. With the <code>diabetes</code> feature, it is most positively correlated with <code>GenHlth</code> and most negatively correlated with <code>Income</code>.</p>
 </section>
 </section>
 <section id="modeling" class="level2">
@@ -982,6 +819,9 @@ Dane, Sohier, and Alex Teboul. 2021. <span>“Diabetes Health Indicators Dataset
 </div>
 <div id="ref-ucimlrepo" class="csl-entry" role="listitem">
 Kelly, Markelle, Rachel Longjohn, and Kolby Nottingham. 2021. <span>“The UCI Machine Learning Repository.”</span> University of California, Irvine, School of Information; Computer Sciences. <a href="http://archive.ics.uci.edu/ml">http://archive.ics.uci.edu/ml</a>.
+</div>
+<div id="ref-bmi" class="csl-entry" role="listitem">
+Keys, Ancel, Flaminio Fidanza, Martti J Karvonen, Noburu Kimura, and Henry L Taylor. 2014. <span>“Indices of Relative Weight and Obesity*.”</span> <em>International Journal of Epidemiology</em> 43 (3): 655–65. <a href="https://doi.org/10.1093/ije/dyu058">https://doi.org/10.1093/ije/dyu058</a>.
 </div>
 <div id="ref-mckinney-proc-scipy-2010" class="csl-entry" role="listitem">
 McKinney, Wes. 2010. <span>“<span>D</span>ata <span>S</span>tructures for <span>S</span>tatistical <span>C</span>omputing in <span>P</span>ython.”</span> In <em><span>P</span>roceedings of the 9th <span>P</span>ython in <span>S</span>cience <span>C</span>onference</em>, edited by Stéfan van der Walt and Jarrod Millman, 56–61. <a href="https://doi.org/ 10.25080/Majora-92bf1922-00a ">https://doi.org/ 10.25080/Majora-92bf1922-00a </a>.

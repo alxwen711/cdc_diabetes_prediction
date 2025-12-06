@@ -1,9 +1,41 @@
+
+
 ![Frequency bar graph of the labels.](../results/figures/EDA_count.png){#fig-count width=40%}
+
+
+For this supervised learning problem, all observations are labelled as either 0, indicating a negative label for no diabetes, or 1, indicating a positive label for either diabetes or pre-diabetes. From @fig-count, the class distribution is imbalanced with roughly 14% of observations labelled positive for diabetes. This motivates using F2 score as our metric; in this data, a false negative is more problematic than a false positive, thus recall rate is prioritized over precision rate. The exact equation for the F2 score used within model evaluation is as follows:
+
+$$F_2 = \frac{5*\text{precision}*\text{recall}}{(4*\text{precision}+\text{recall})}$$
+
+
+Continuing the EDA, @fig-binary displays the distribution of all binary features, where the labels `f = a, d = b` $(a,b \in \{0,1\})$  indicate the frequencey that an observation had value `a` in the given feature, and value `b` in the diabetes label. 
+
+
+![Frequency bar graphs of the binary features.](../results/figures/EDA_binary.png){#fig-binary width=100%}
+
+There is a significant variance in the distributions of the binary features; `Smoker` and `Sex` have similar number of observations where `f = 0` compared to `f = 1`, where as a feature like `Stroke` is heavily weighted to `f = 0`, indicating very few observations indicate they have had a stroke before. Due to the high number of observations in the dataset, even where there are imbalances, we can expect there to be enough observations with either a positive (`1`) or negative (`0`) value for any given binary feature that should prevent low sample size bias. `HighBP`, `HighChol`, and `Smoker` all have more observations with `f = 0` than `f = 1`, but in all of those features, the frequency of `f = 1, d = 1` labels exceed that of `f = 0, d = 1` labels, which indicate that we can expect that the model will indicate an association with these risks factors and a risk of diabetes. 
+
+
+![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=80%}
 
 ![Boxplots of the non-binary numeric features.](../results/figures/EDA_boxplot.png){#fig-boxplot width=100%}
 
 ![Frequency bar graphs of the binary features.](../results/figures/EDA_binary.png){#fig-binary width=100%}
 
-![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=100%}
+@fig-boxplot takes a random sample of 1000 observations so that the boxplot is not overly populated and that the density of the points visibly correlates with @fig-histogram more closely. From analyzing both charts, we can make the following brief observations about each non-binary feature:   
+
+- `Age` has been encoded to a 13-point scale that is somewhat normally distributed with a slight negative skew.
+
+- `BMI` is a normally distributed feature with several extreme upper outliers that go up to 98. A BMI of 98 for someone that is 5 feet tall would result in a weight of roughly 500 pounds @bmi, which is an outlier, but still reasonably possible that this is considered an accurate observation.
+
+- `Education` is on a 6-point scale, while `GenHlth` is on a 5-point scale. Both of these features have the option to be preprocessed categorically, but since these are ordinal in nature, using a standard scaler on these features is a reasonable option this analysis goes with.
+
+- `MentHlth` and `PhysHlth` have the majority of observations with a value of 0 
+
+Most importantly, with all of the varying scales these features are on, it indicates that a `StandardScaler()` can be used on all numerical features to normalize the values of each feature into identical normal distributions.
+
 
 ![Feature-feature correlation plot of all features.](../results/figures/EDA_correlation.png){#fig-correlation width=100%}
+
+Lastly with @fig-correlation, the main observation is that the strongest non-trivial feature-feature correlation does not exceed an absolute magnitued of 0.7. There are several significantly positively correlated feature pairs (`PhysHlth`-`GenHlth`, `PhysHlth`-`DiffWalk`, `Income`-`Education`, `GenHlth`-`DiffWalk`) and several significantly negative correlated feature pairs (`DiffWalk-Income`, `GenHlth-Income`). Noticably, `Income`, `DiffWalk`, and `GenHlth` appear in both the most positively and most negatively correlated feature pairs and have higher overall correlations with other features compared to other features such as `Sex`, `Smoker`, `Stroke`, and `Veggies` from the overall darker shades of green and orange in the correlation heatmap. With the `diabetes` feature, it is most positively correlated with `GenHlth` and most negatively correlated with `Income`.
+
