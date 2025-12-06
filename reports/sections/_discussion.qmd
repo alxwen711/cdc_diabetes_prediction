@@ -1,3 +1,6 @@
+```{python}
+score_table = pd.read_csv("../results/tables/model_scores.csv")
+```
 The current performance of the Decision Tree model is likely already good enough to offer some benefit in the real world given the large number of people with undiagnosed diabetes. However, the recall score of `{python} f"{score_table.loc[0, 'Test recall']:.1%}"` could likely be improved, and the precision score of `{python} f"{score_table.loc[0, 'Test precision']:.1%}"` definitely leaves something to be desired. 
 
 We were surprised by the high rate of false positives shown in @fig-confusion-matrix, which might be an indication of how many non-diabetic people are at risk. Further improvements to predicting diabetes could likely be found by trying a wider variety of model types and using a wider hyperparameter search, and possibly through more feature engineering. A future study could be done to find a smaller set of the most easy to obtain features, as such a model would be more usable by the average person. 
