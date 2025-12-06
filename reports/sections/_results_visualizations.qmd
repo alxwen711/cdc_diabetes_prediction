@@ -10,7 +10,7 @@ The following table summarizes the performance metrics for our two models evalua
 import pandas as pd
 from IPython.display import Markdown
 
-table_to_display = pd.read_csv("../../results/tables/model_scores.csv")
+table_to_display = pd.read_csv("../results/tables/model_scores.csv")
 Markdown(table_to_display.to_markdown(index=False))
 ```
 
@@ -18,12 +18,12 @@ As shown in @tbl-performance-metrics, the Decision Tree model demonstrates super
 
 ## Performance Visualization
 
-![Comparison of model performance metrics on the test set](../../results/figures/model_performance_comparison.png){#fig-performance-comparison}
+![Comparison of model performance metrics on the test set](../results/figures/model_performance_comparison.png){#fig-performance-comparison}
 
 The performance comparison in @fig-performance-comparison demonstrates that the Decision Tree model outperforms the Naive Bayes model across all evaluation metrics.
 
 ## Confusion Matrix Analysis
 
-![Confusion matrix for the best performing model (Decision Tree)](../../results/figures/confusion_matrix.png){#fig-confusion-matrix}
+![Confusion matrix for the best performing model (Decision Tree)](../results/figures/confusion_matrix.png){#fig-confusion-matrix}
 
 The confusion matrix in @fig-confusion-matrix shows the detailed classification performance of our best model. The model correctly identified a significant portion of the test cases, demonstrating strong predictive capability.
