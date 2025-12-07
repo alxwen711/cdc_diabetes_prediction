@@ -96,12 +96,25 @@ window.Quarto = {
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
-  <ul class="collapse">
+  <ul>
   <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
-  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
-  <li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach">Modeling Approach</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a>
+  <ul class="collapse">
+  <li><a href="#data-summary" id="toc-data-summary" class="nav-link" data-scroll-target="#data-summary">Data Summary</a></li>
+  <li><a href="#visualizations" id="toc-visualizations" class="nav-link" data-scroll-target="#visualizations">Visualizations</a></li>
+  </ul></li>
+  <li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a>
+  <ul class="collapse">
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting">Model Fitting</a></li>
+  <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a></li>
+  </ul></li>
   <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion">Discussion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -147,8 +160,11 @@ window.Quarto = {
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="packages" class="level3">
+<h3 class="anchored" data-anchor-id="packages">Packages</h3>
 <p>This analysis was performed in Python 3.11.6 <span class="citation" data-cites="pythondocs">(<a href="#ref-pythondocs" role="doc-biblioref"><em>Python 3.11.6 Documentation</em> 2021-2025</a>)</span>. Additionally, here is a list of the Python packages used within the analysis with brief explanation:</p>
 <table class="caption-top table">
+<caption>Table of Python packages used</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Package</th>
@@ -220,25 +236,89 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
+</section>
 <section id="modeling-approach" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-approach">Modeling Approach</h3>
+<p>The data were split 70/30 into training and test sets with stratification on the target.<br>
+Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score because it is most important to not miss true positives.</p>
+<ol type="1">
+<li><p><strong>Decision Tree</strong> (class_weight=‘balanced’)<br>
+Hyperparameters: max_depth: {6,8,10,12,14}, min_samples_leaf: {175, 200, 225, 250}<br>
+<strong>Best parameters</strong>: max_depth=10, min_samples_leaf=225<br>
+<strong>Best CV f2-score</strong> = 0.587</p></li>
+<li><p><strong>Bernoulli Naive Bayes</strong> (with StandardScaler preprocessing)<br>
+Hyperparameters: alpha: {1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4}<br>
+<strong>Best parameters</strong>: alpha=0.001<br>
+<strong>Best CV f2-score</strong> = 0.46</p></li>
+</ol>
 </section>
-<section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
 </section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<div class="cell" data-execution_count="5">
+<div id="tbl-model_scores" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="5">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-model_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Scores for models.
+</figcaption>
+<div aria-describedby="tbl-model_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="16">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 15%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 15%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Unnamed: 0</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">Test Accuracy</th>
+<th style="text-align: right;">Test f2-score</th>
+<th style="text-align: right;">Test recall</th>
+<th style="text-align: right;">Test precision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Decision Tree</td>
+<td style="text-align: right;">0.706</td>
+<td style="text-align: right;">0.587</td>
+<td style="text-align: right;">0.784</td>
+<td style="text-align: right;">0.293</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Naive Bayes</td>
+<td style="text-align: right;">0.814</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">0.489</td>
+<td style="text-align: right;">0.373</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
 </section>
 <section id="eda" class="level2">
 <h2 class="anchored" data-anchor-id="eda">EDA</h2>
 <section id="data-summary" class="level3">
 <h3 class="anchored" data-anchor-id="data-summary">Data Summary</h3>
-<div class="cell" data-execution_count="2">
-<div id="tbl-describe" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
+<div class="cell" data-execution_count="6">
+<div id="tbl-describe" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Description of the training data.
+Table&nbsp;2: Description of the training data.
 </figcaption>
 <div aria-describedby="tbl-describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="11">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="17">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 28%">
@@ -512,15 +592,15 @@ Table&nbsp;1: Description of the training data.
 </figure>
 </div>
 </div>
-<p><a href="#tbl-describe" class="quarto-xref">Table&nbsp;1</a> displays a numerical distribution of the dataset, where as <a href="#tbl-head" class="quarto-xref">Table&nbsp;2</a> lists the first 5 rows transposed of the training dataset as example observations used. Both tables have been transposed from their original form for more syntactical presentation. All features of the dataset consist entirely of integer values, and by all <code>count</code> values being identically 177576 (the number of observations in the training dataset), there exist no null values, making the preprocessing step of the analysis relatively simple.</p>
-<div class="cell" data-execution_count="3">
-<div id="tbl-head" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<p><a href="#tbl-describe" class="quarto-xref">Table&nbsp;2</a> displays a numerical distribution of the dataset, where as <a href="#tbl-head" class="quarto-xref">Table&nbsp;3</a> lists the first 5 rows transposed of the training dataset as example observations used. Both tables have been transposed from their original form for more syntactical presentation. All features of the dataset consist entirely of integer values, and by all <code>count</code> values being identically 177576 (the number of observations in the training dataset), there exist no null values, making the preprocessing step of the analysis relatively simple.</p>
+<div class="cell" data-execution_count="7">
+<div id="tbl-head" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="7">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: First few rows of the training data as example observations.
+Table&nbsp;3: First few rows of the training data as example observations.
 </figcaption>
 <div aria-describedby="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="12">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="18">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -786,15 +866,114 @@ Figure&nbsp;5: Feature-feature correlation plot of all features.
 </section>
 <section id="modeling" class="level2">
 <h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
-<section id="classification-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="classification-analysis">Classification Analysis</h3>
+<section id="model-fitting" class="level3">
+<h3 class="anchored" data-anchor-id="model-fitting">Model Fitting</h3>
+<p>The data were split 70/30 into training and test sets with stratification on the target.<br>
+Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score because it is most important to not miss true positives.</p>
+<ol type="1">
+<li><p><strong>Decision Tree</strong> (class_weight=‘balanced’)<br>
+Hyperparameters: max_depth: {6,8,10,12,14}, min_samples_leaf: {175, 200, 225, 250}<br>
+<strong>Best parameters</strong>: max_depth=10, min_samples_leaf=225<br>
+<strong>Best CV f2-score</strong> = 0.587</p></li>
+<li><p><strong>Bernoulli Naive Bayes</strong> (with StandardScaler preprocessing)<br>
+Hyperparameters: alpha: {1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4}<br>
+<strong>Best parameters</strong>: alpha=0.001<br>
+<strong>Best CV f2-score</strong> = 0.46</p></li>
+</ol>
 </section>
-<section id="result-visualizations" class="level3">
-<h3 class="anchored" data-anchor-id="result-visualizations">Result Visualizations</h3>
+<section id="results-1" class="level3">
+<h3 class="anchored" data-anchor-id="results-1">Results</h3>
+<section id="performance-table" class="level4">
+<h4 class="anchored" data-anchor-id="performance-table">Performance Table</h4>
+<p>The following table summarizes the performance metrics for our two models evaluated on the test set:</p>
+<div class="cell" data-execution_count="10">
+<div id="tbl-performance-metrics" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="10">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-performance-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Comparison of model performance metrics on the test set
+</figcaption>
+<div aria-describedby="tbl-performance-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="21">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 15%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 15%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Unnamed: 0</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">Test Accuracy</th>
+<th style="text-align: right;">Test f2-score</th>
+<th style="text-align: right;">Test recall</th>
+<th style="text-align: right;">Test precision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Decision Tree</td>
+<td style="text-align: right;">0.706</td>
+<td style="text-align: right;">0.587</td>
+<td style="text-align: right;">0.784</td>
+<td style="text-align: right;">0.293</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Naive Bayes</td>
+<td style="text-align: right;">0.814</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">0.489</td>
+<td style="text-align: right;">0.373</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>As shown in <a href="#tbl-performance-metrics" class="quarto-xref">Table&nbsp;4</a>, the Decision Tree model demonstrates superior performance across all evaluation metrics compared to the Naive Bayes model. The Decision Tree achieves higher accuracy, f2-score, recall, and precision scores, making it the optimal choice for our diabetes prediction task.</p>
+</section>
+<section id="performance-visualization" class="level4">
+<h4 class="anchored" data-anchor-id="performance-visualization">Performance Visualization</h4>
+<div id="fig-performance-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-performance-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../results/figures/model_performance_comparison.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-performance-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Comparison of model performance metrics on the test set
+</figcaption>
+</figure>
+</div>
+<p>The performance comparison in <a href="#fig-performance-comparison" class="quarto-xref">Figure&nbsp;6</a> demonstrates that the Decision Tree model outperforms the Naive Bayes model across all evaluation metrics.</p>
+</section>
+<section id="confusion-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h4>
+<div id="fig-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../results/figures/confusion_matrix.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Confusion matrix for the best performing model (Decision Tree)
+</figcaption>
+</figure>
+</div>
+<p>The confusion matrix in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;7</a> shows the detailed classification performance of our best model. The model correctly identified a significant portion of the test cases, demonstrating strong predictive capability.</p>
+</section>
 </section>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>The current performance of the Decision Tree model is likely already good enough to offer some benefit in the real world given the large number of people with undiagnosed diabetes. However, the recall score of 78.4% could likely be improved, and the precision score of 29.3% definitely leaves something to be desired.</p>
+<p>We were surprised by the high rate of false positives shown in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;7</a>, which might be an indication of how many non-diabetic people are at risk. Further improvements to predicting diabetes could likely be found by trying a wider variety of model types and using a wider hyperparameter search, and possibly through more feature engineering. A future study could be done to find a smaller set of the most easy to obtain features, as such a model would be more usable by the average person.</p>
+<p>Some work is needed to determine this smaller number of easy to obtain features that doesn’t significantly reduce model performance. Another question is whether a regression model could be made that predicts a person’s risk as a percent chance of developing diabetes, though longitudinal data might be required for this type of prediction.</p>
 </section>
 <section id="references" class="level2 unnumbered">
 
