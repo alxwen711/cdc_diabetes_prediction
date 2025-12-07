@@ -101,16 +101,16 @@ Then run the following scripts to create all necessary files in the `results` fo
 ```
 python scripts/01-download_extract.py
 
-python scripts/02-clean_transform.py # edit with exact command(s)
+python scripts/02-clean_transform.py
 
-python scripts/03-split_preprocess_data.py # edit with exact command(s)
+python scripts/03-split_preprocess_data.py
 
 python scripts/04-EDA.py -c saveallcharts -p results/figures
 python scripts/04-EDA.py -c describe -p results/tables
 
-python scripts/05-model_fitting.py # edit with exact command(s)
+python scripts/05-model_fitting.py
 
-python scripts/06-model_evaluation.py # edit with exact command(s)
+python scripts/06-model_evaluation.py
 ```
 
 8. To ensure that the PDF format runs properly (avoiding a missing font issue documented in  [Issue #48](https://github.com/alxwen711/cdc_diabetes_prediction/issues/48#issue-3700114411)), run this command first to ensure the fonts can be loaded properly:
