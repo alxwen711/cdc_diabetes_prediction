@@ -16,8 +16,6 @@ def generate_label(row: pd.Series) -> str:
     return f"f = {row['feature_value']}, d = {row['diabetes']}"
 
 
-# pytz and jsonschema and toolz needed to resolve the imports
-
 if __name__ == "__main__":
     df = pd.DataFrame({'feature_value': [1,2], 'diabetes': [3,4]})
     df["label"] = df.apply(generate_label, axis = 1)
