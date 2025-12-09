@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: results/models/tree_model.pickle results/models/naive_bayes_model.pickle
+all: results/figures/model_performance_comparison.png results/figures/confusion_matrix.png results/tables/model_scores.csv
 
 # Step 1: Download and save raw CDC diabetes data
 data/raw/diabetes_raw.csv: scripts/01-download_extract.py
@@ -32,6 +32,15 @@ results/models/tree_model.pickle results/models/naive_bayes_model.pickle: script
 		--xfile=data/processed/diabetes_X_train.csv \
 		--yfile=data/processed/diabetes_y_train.csv
 
+# Step 6: Evaluate models and produce test set results
+results/figures/model_performance_comparison.png results/figures/confusion_matrix.png results/tables/model_scores.csv: scripts/06-model_evaluation.py \
+	data/processed/diabetes_X_test.csv data/processed/diabetes_y_test.csv \
+	results/models/tree_model.pickle results/models/naive_bayes_model.pickle
+	python scripts/06-model_evaluation.py \
+		--x-test=data/processed/diabetes_X_test.csv \
+		--y-test=data/processed/diabetes_y_test.csv \
+		--model-dir=results/models \
+		--img-dir=results/figures
 
 clean:
 	rm -rf data/raw/diabetes_raw.csv
@@ -41,11 +50,13 @@ clean:
 	rm -rf data/processed/diabetes_y_train.csv
 	rm -rf data/processed/diabetes_X_test.csv
 	rm -rf data/processed/diabetes_y_test.csv
-	rm -rf results/figures/confusion_matrix.png
-	rm -rf results/figures/EDA_binary.png
-	rm -rf results/figures/EDA_boxplot.png
-	rm -rf results/figures/EDA_correlation.png
 	rm -rf results/figures/EDA_count.png
 	rm -rf results/figures/EDA_histogram.png
+	rm -rf results/figures/EDA_boxplot.png
+	rm -rf results/figures/EDA_correlation.png
+	rm -rf results/figures/EDA_binary.png
+	rm -rf results/figures/model_performance_comparison.png
+	rm -rf results/figures/confusion_matrix.png
+	rm -rf results/tables/model_scores.csv
 	rm -rf results/models/tree_model.pickle
 	rm -rf results/models/naive_bayes_model.pickle
