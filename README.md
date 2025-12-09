@@ -124,7 +124,9 @@ quarto install tinytex
 quarto render reports/cdc_diabetes_prediction_report.qmd
 ```
 
+### Running test suite
 
+To run the test suite start with by running `docker compose up` as above. Then run `pytest` in the project root directory. More details can be found in the [`tests`](tests) directory.
 
 ## References and Acknowledgements
 
