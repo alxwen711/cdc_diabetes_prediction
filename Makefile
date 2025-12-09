@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-all: data/processed/diabetes_X_train.csv data/processed/diabetes_y_train.csv data/processed/diabetes_X_test.csv data/processed/diabetes_y_test.csv
+all: results/figures/EDA_count.png results/figures/EDA_histogram.png results/figures/EDA_boxplot.png results/figures/EDA_correlation.png results/figures/EDA_binary.png
 
 # Step 1: Download and save raw CDC diabetes data
 data/raw/diabetes_raw.csv: scripts/01-download_extract.py
@@ -22,6 +22,11 @@ data/processed/diabetes_X_train.csv data/processed/diabetes_y_train.csv data/pro
 		--clean-test=data/clean/diabetes_clean_test.csv \
 		--output-dir=data/processed
 
+# Step 4: EDA
+results/figures/EDA_count.png results/figures/EDA_histogram.png results/figures/EDA_boxplot.png results/figures/EDA_correlation.png results/figures/EDA_binary.png: scripts/04-EDA.py data/processed/diabetes_X_train.csv data/processed/diabetes_y_train.csv
+	python scripts/04-EDA.py --command saveallcharts --path results/figures
+
+
 clean:
 	rm -rf data/raw/diabetes_raw.csv
 	rm -rf data/clean/diabetes_clean_train.csv
@@ -30,3 +35,9 @@ clean:
 	rm -rf data/processed/diabetes_y_train.csv
 	rm -rf data/processed/diabetes_X_test.csv
 	rm -rf data/processed/diabetes_y_test.csv
+	rm -rf results/figures/confusion_matrix.png
+	rm -rf results/figures/EDA_binary.png
+	rm -rf results/figures/EDA_boxplot.png
+	rm -rf results/figures/EDA_correlation.png
+	rm -rf results/figures/EDA_count.png
+	rm -rf results/figures/EDA_histogram.png
