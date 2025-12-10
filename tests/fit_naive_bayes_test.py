@@ -1,4 +1,5 @@
 import sys
+import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import pandas as pd
@@ -35,13 +36,13 @@ def test_xtrain_type_error():
     y = pd.Series([0])
     # Wrong type for X_train
     with pytest.raises(TypeError, match="X_train must be a pandas dataframe"):
-        fit_naive_bayes(X_train=[1, 2, 3], y_train=y)
+        fit_naive_bayes(X_train=[1, 2, 3], y_train=y) # pyright: ignore[reportArgumentType]
 
 def test_ytrain_type_error(feature_columns):
     X = pd.DataFrame(np.zeros((1, len(feature_columns))), columns=sorted(feature_columns))
     # Wrong type for y_train
     with pytest.raises(TypeError, match="y_train must be a pandas series"):
-        fit_naive_bayes(X_train=X, y_train=[0, 1])
+        fit_naive_bayes(X_train=X, y_train=[0, 1]) # pyright: ignore[reportArgumentType]
 
 # ---- EMPTY INPUT TESTS ----
 
