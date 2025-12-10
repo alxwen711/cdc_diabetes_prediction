@@ -2,7 +2,7 @@
 
 ## Running tests
 
-To run the test suite navigate to the project root directory and run the command `pytest`
+To run the test suite navigate to the project root directory and run the command `pytest tests/*`
 
 ## Test zip files
 

@@ -6,6 +6,9 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.generate_label import generate_label
 
+import warnings
+warnings.filterwarnings("ignore",category=pd.errors.SettingWithCopyWarning)
+
 # import script 03-split_preprocess_data.py to obtain training data
 preprocess_name = "03-split_preprocess_data"
 preprocess = __import__(preprocess_name)
@@ -24,40 +27,13 @@ def eda_describe(df: pd.DataFrame) -> list:
     List[pd.DataFrame]
     List of 3 dataframes consisting of the head, tail, and description of the DataFrame.
     
-    
     Examples
     --------
     >>> d = {'col1': [1, 2], 'col2': [3, 4]}
     >>> df = pd.DataFrame(data=d)
-    >>> eda_describe(df)
-    
-    
-       col1  col2
-    0     1     3
-    1     2     4
-
-
-       col1  col2
-    0     1     3
-    1     2     4
-
-
-               col1      col2
-    count  2.000000  2.000000
-    mean   1.500000  3.500000
-    std    0.707107  0.707107
-    min    1.000000  3.000000
-    25%    1.250000  3.250000
-    50%    1.500000  3.500000
-    75%    1.750000  3.750000
-    max    2.000000  4.000000
+    >>> eda_describe(df) 
     """
-    print("First few rows of the training data:")
-    print(df.head())
-    print("\nLast few rows of the training data:")
-    print(df.tail())
-    print("\nDescription of the training data:")
-    print(df.describe())
+
     return [df.head(), df.tail(), df.describe().round(4)] # avoid long decimals from messing up pdf format
     
 
@@ -148,6 +124,8 @@ def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
     df_sample_binary = df_long[df_long["feature"].isin(binary_features)]
     
     # reduce to counts of binary features
+
+
     df_sample_binary["label"] = df_sample_binary.apply(generate_label, axis = 1)
     df_sample_binary = df_sample_binary.value_counts().rename("count").reset_index()
     
