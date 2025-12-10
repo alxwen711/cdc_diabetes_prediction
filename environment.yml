@@ -26,5 +26,6 @@ dependencies:
   - jsonschema=4.25.0
   - toolz=1.0.0
   - pytest=8.4.1
+  - make=4.2.1
   - pip=25.3
     # - deepchecks==0.18.1
