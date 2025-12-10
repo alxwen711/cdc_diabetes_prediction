@@ -9,6 +9,10 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn.pipeline import Pipeline
 from src.fit_naive_bayes import fit_naive_bayes   # UPDATE this import to match project structure
 
+### Attribution:
+# These tests were written with help from chatgpt. 
+# This was done in accordance with the guidelines Sky gave during lecture.
+
 # Fixture: required column names
 @pytest.fixture
 def feature_columns():
