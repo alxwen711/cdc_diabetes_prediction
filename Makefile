@@ -60,6 +60,9 @@ results/figures/EDA_histogram.png \
 results/figures/EDA_boxplot.png \
 results/figures/EDA_correlation.png \
 results/figures/EDA_binary.png \
+results/tables/EDA_describe.csv \
+results/tables/EDA_head.csv \
+results/tables/EDA_tail.csv \
 results/figures/model_performance_comparison.png \
 results/figures/confusion_matrix.png \
 results/tables/model_scores.csv \
@@ -69,25 +72,8 @@ reports/references.bib
 
 
 clean:
-	rm -rf data/raw/diabetes_raw.csv
-	rm -rf data/clean/diabetes_clean_train.csv
-	rm -rf data/clean/diabetes_clean_test.csv
-	rm -rf data/processed/diabetes_X_train.csv
-	rm -rf data/processed/diabetes_y_train.csv
-	rm -rf data/processed/diabetes_X_test.csv
-	rm -rf data/processed/diabetes_y_test.csv
-	rm -rf results/figures/EDA_count.png
-	rm -rf results/figures/EDA_histogram.png
-	rm -rf results/figures/EDA_boxplot.png
-	rm -rf results/figures/EDA_correlation.png
-	rm -rf results/figures/EDA_binary.png
-	rm -rf results/figures/model_performance_comparison.png
-	rm -rf results/figures/confusion_matrix.png
-	rm -rf results/figures/EDA_describe.csv
-	rm -rf results/figures/EDA_head.csv
-	rm -rf results/figures/EDA_tail.csv
-	rm -rf results/tables/model_scores.csv
-	rm -rf results/models/tree_model.pickle
-	rm -rf results/models/naive_bayes_model.pickle
+	rm -rf data/*
+	rm -rf results/*
 	rm -rf reports/cdc_diabetes_prediction_report.html
 	rm -rf reports/cdc_diabetes_prediction_report.pdf
+	rm -rf reports/cdc_diabetes_prediction_report_files/*
