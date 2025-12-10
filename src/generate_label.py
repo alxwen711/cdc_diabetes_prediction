@@ -5,7 +5,9 @@ def generate_label(row: pd.Series,
                    feature_label: str = "f", 
                    value_name: str = "diabetes",
                    value_label: str = "d") -> str:
-    """Helper function to create the x-axis labels for eda_binary.
+    """Helper function to create plot labels for a pd.Dataframe.
+    Application of this function is only through df.apply(generate_label, axis = 1)
+    where df is a pd.Dataframe.
     
     Parameters
     ----------
@@ -30,7 +32,7 @@ def generate_label(row: pd.Series,
     >>> df = pd.DataFrame({'feature_value': [1,2], 'diabetes': [3,4]})
     >>> df["label"] = df.apply(generate_label, axis = 1)
     >>> print(df)
-    
+
        feature_value  diabetes         label
     0              1         3  f = 1, d = 3
     1              2         4  f = 2, d = 4
