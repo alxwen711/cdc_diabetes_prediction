@@ -24,6 +24,25 @@ def fit_naive_bayes(X_train: pd.DataFrame, y_train: pd.Series):
         The best naive bayes model from grid search.
     
     """
+    expected_feature_columns = {
+        'HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke',
+        'HeartDiseaseorAttack', 'PhysActivity', 'Fruits', 'Veggies',
+        'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'GenHlth',
+        'MentHlth', 'PhysHlth', 'DiffWalk', 'Sex', 'Age', 'Education',
+        'Income'
+    }
+
+    if not isinstance(X_train, pd.DataFrame):
+        raise TypeError("X_train must be a pandas dataframe")
+    if not isinstance(y_train, pd.Series):
+        raise TypeError("y_train must be a pandas series")
+    if X_train.empty:
+        raise ValueError("X_train must contain at least one row.")
+    if y_train.empty:
+        raise ValueError("y_train must contain at least one row.")
+    if set(X_train.columns) != expected_feature_columns:
+        raise ValueError(f"X_train should have features columns: {expected_feature_columns}")
+
     preprocessor = make_column_transformer(
         (StandardScaler(), X_train.columns)
     )
