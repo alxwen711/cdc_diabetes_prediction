@@ -2,6 +2,9 @@ import click
 import pandas as pd
 import altair as alt
 import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from src.generate_label import generate_label
 
 # import script 03-split_preprocess_data.py to obtain training data
 preprocess_name = "03-split_preprocess_data"
@@ -120,20 +123,6 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
 
     return chart
 
-def generate_label(row) -> str:
-    """Helper function to create the x-axis labels for eda_binary.
-    
-    Parameters
-    ----------
-    row : pd.Row
-        A row of a pandas Dataframe.
-
-    Returns
-    -------
-    str
-        str type label used in the binary bar plots.
-    """
-    return f"f = {row['feature_value']}, d = {row['diabetes']}"
 
 def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
     """
