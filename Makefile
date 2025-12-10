@@ -30,6 +30,11 @@ data/processed/diabetes_X_train.csv \
 data/processed/diabetes_y_train.csv
 	python scripts/04-EDA.py --command saveallcharts --path results/figures
 
+results/tables/EDA_describe.csv results/tables/EDA_head.csv results/tables/EDA_tail.csv: scripts/04-EDA.py \
+data/processed/diabetes_X_train.csv \
+data/processed/diabetes_y_train.csv
+	python scripts/04-EDA.py --command describe --path results/tables
+
 # Step 5: Fit models and save as pickle files
 results/models/tree_model.pickle results/models/naive_bayes_model.pickle: scripts/05-model_fitting.py data/processed/diabetes_X_train.csv data/processed/diabetes_y_train.csv
 	python scripts/05-model_fitting.py \
@@ -78,6 +83,9 @@ clean:
 	rm -rf results/figures/EDA_binary.png
 	rm -rf results/figures/model_performance_comparison.png
 	rm -rf results/figures/confusion_matrix.png
+	rm -rf results/figures/EDA_describe.csv
+	rm -rf results/figures/EDA_head.csv
+	rm -rf results/figures/EDA_tail.csv
 	rm -rf results/tables/model_scores.csv
 	rm -rf results/models/tree_model.pickle
 	rm -rf results/models/naive_bayes_model.pickle
