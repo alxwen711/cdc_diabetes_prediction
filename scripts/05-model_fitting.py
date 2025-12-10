@@ -8,8 +8,9 @@ of the decision tree model (the better model) will be saved.
 
 # imports
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import click
 import pickle
 
