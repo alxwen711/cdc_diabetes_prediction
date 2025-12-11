@@ -1,6 +1,5 @@
 import pytest
 import shutil
-import os
 
 # Test cleanup code is adapted from https://github.com/ttimbers/breast-cancer-predictor/blob/3.0.0/tests/conftest.py.
 

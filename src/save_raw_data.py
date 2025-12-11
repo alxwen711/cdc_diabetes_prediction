@@ -38,7 +38,9 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
     if not isinstance(X, pd.DataFrame): raise TypeError("X object obtained is not a Pandas Dataframe.")
     if not isinstance(y, pd.DataFrame): raise TypeError("y object obtained is not a Pandas Dataframe.")
 
+    # dimension error checking
     if y.shape[1] != 1: raise ValueError(f"y Dataframe's shape {y.shape} is incompatible for save_raw_data, must be exactly one column.")
+    if X.shape[0] != y.shape[0]: raise IndexError(f"X contains {X.shape[0]} but y contains {y.shape[0]}, incompatible shapes")
 
     data = X
 
