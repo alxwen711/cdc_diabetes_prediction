@@ -42,13 +42,18 @@ def main(filepath: str = "data/raw", filename: str = "diabetes_raw.csv", label: 
     """Obtain raw CDC diabetes data and save to a single raw csv file. Default location is data/raw/diabetes_raw.csv."""
     
     click.echo("Obtaining raw CDC data...")
+    X,y = None, None
+    try:
+        # fetch dataset via the UCI ML Repository
+        cdc_diabetes_health_indicators = fetch_ucirepo(id=891) 
 
-    # fetch dataset via the UCI ML Repository
-    cdc_diabetes_health_indicators = fetch_ucirepo(id=891) 
-
-    # data (as pandas dataframes) 
-    X = cdc_diabetes_health_indicators.data.features 
-    y = cdc_diabetes_health_indicators.data.targets
+        # data (as pandas dataframes) 
+        X = cdc_diabetes_health_indicators.data.features 
+        y = cdc_diabetes_health_indicators.data.targets
+        
+    except Exception as e:
+        print("The attempt to obtain the raw CDC data failed, most likely due to a connection error with the main server. If the raw dataset has been already loaded in the analysis, this error can most likely be ignored and the user should proceed with the remainder of the Makefile. The full details of the Exception that occurred are as follows:")
+        raise(e)
     
     click.echo(f"Raw CDC data obtained, writing to {filepath}/{filename}...")
     save_raw_data(X, y, filepath, filename, label)
