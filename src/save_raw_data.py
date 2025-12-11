@@ -1,7 +1,7 @@
 import pandas as pd
 import os
-from ucimlrepo import fetch_ucirepo 
-import click
+
+
 
 def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", filename: str = "diabetes_raw.csv", label: str = "diabetes"):
     """
@@ -23,13 +23,18 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
     
     Examples
     --------
-    >>> X,y = obtain_raw_data()
+    >>> from ucimlrepo import fetch_ucirepo
+    >>> cdc_diabetes_health_indicators = fetch_ucirepo(id=891) 
+    >>> X = cdc_diabetes_health_indicators.data.features 
+    >>> y = cdc_diabetes_health_indicators.data.targets
     >>> save_raw_data(X, y, "data/raw", "diabetes_raw.csv", "diabetes")
     
     Raises
     --------
     TypeError
         Either X or y is not a valid DataFrame.
+    IndexError
+        The shapes of the X and y DataFrames are not compatible for being saved in a single DataFrame due to differing row counts.
     ValueError
         Either y is not a one column DataFrame or the attempt to combine the DataFrames failed, the full error is additionally outputted.
     """
@@ -40,7 +45,7 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
 
     # dimension error checking
     if y.shape[1] != 1: raise ValueError(f"y Dataframe's shape {y.shape} is incompatible for save_raw_data, must be exactly one column.")
-    if X.shape[0] != y.shape[0]: raise IndexError(f"X contains {X.shape[0]} but y contains {y.shape[0]}, incompatible shapes")
+    if X.shape[0] != y.shape[0]: raise IndexError(f"X contains {X.shape[0]} rows but y contains {y.shape[0]} rows, incompatible shapes")
 
     data = X
 
