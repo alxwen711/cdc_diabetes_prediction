@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
-- Elaborated on explanation of f2-score based on peer feedback.
-- In the introduction defined target more clearly as per Milestone 1 TA feedback.
+- Elaborated on explanation of f2-score based on peer feedback. (#72)
+- In the introduction defined target more clearly as per Milestone 1 TA feedback. (#72)
 
 ### Removed
