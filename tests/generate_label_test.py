@@ -3,7 +3,7 @@ import pytest
 import sys
 import os
 
-# Import the count_classes function from the src folder
+# Import the generate_label function from the src folder
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.generate_label import generate_label
 

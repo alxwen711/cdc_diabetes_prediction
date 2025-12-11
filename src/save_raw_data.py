@@ -13,7 +13,7 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
     X : pd.DataFrame
         DataFrame corresponding to the features of the data set.
     y : pd.DataFrame
-        DataFrame corresponding to the labels of the data set.
+        DataFrame corresponding to the labels of the data set. y must have exactly one column.
     filepath: str, default = "data/raw"
         Directory location to write the combined DataFrame in csv format.
     filename: str, default = "diabetes_raw.csv"
@@ -31,12 +31,14 @@ def save_raw_data(X: pd.DataFrame, y: pd.DataFrame, filepath: str = "data/raw", 
     TypeError
         Either X or y is not a valid DataFrame.
     ValueError
-        Attempt to combine the DataFrames failed, the full error is additionally outputted.
+        Either y is not a one column DataFrame or the attempt to combine the DataFrames failed, the full error is additionally outputted.
     """
 
     # Try creating the combined DataFrame
     if not isinstance(X, pd.DataFrame): raise TypeError("X object obtained is not a Pandas Dataframe.")
     if not isinstance(y, pd.DataFrame): raise TypeError("y object obtained is not a Pandas Dataframe.")
+
+    if y.shape[1] != 1: raise ValueError(f"y Dataframe's shape {y.shape} is incompatible for save_raw_data, must be exactly one column.")
 
     data = X
 
