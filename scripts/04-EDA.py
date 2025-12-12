@@ -93,8 +93,8 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
         y=alt.Y("count()", title="Count").stack(False),
         color=alt.Color("diabetes:N"),
     ).properties(
-        width=500,
-        height=150,
+        width=650,
+        height=130,
     ).facet(
         "feature:N",
         columns=1,
@@ -223,7 +223,7 @@ def eda_correlation(X_train):
     ).properties(
         width=600,
         height=600,
-        title="Correlation Heatmap"
+        title="Feature-Feature Correlation Heatmap"
     )
     return chart
 
