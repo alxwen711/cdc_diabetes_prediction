@@ -1,3 +1,11 @@
+"""Create the EDA plots for the CDC Diabetes Prediction Report.
+
+This script will load the training data created from 03-split_preprocess_data.py
+and create several visual plots and tables to be saved to the results folder for
+later report use. 
+"""
+
+
 import click
 import pandas as pd
 import altair as alt
