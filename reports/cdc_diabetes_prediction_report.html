@@ -155,8 +155,8 @@ window.Quarto = {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>In Canada and the USA approximately 10% of people are living with diabetes. In Canada in 2023 approximately 3.7 million people were living with diabetes and in the USA in 2021 approzimately 38.4 million people were living with diabetes. (<span class="citation" data-cites="diabetescanada"><span>“Snapshot of Diabetes in Canada, 2023”</span> (<a href="#ref-diabetescanada" role="doc-biblioref">2023</a>)</span>) In the USA it is the 8th leading cause of death. (<span class="citation" data-cites="usarenal">Rios et al. (<a href="#ref-usarenal" role="doc-biblioref">2017</a>)</span>) Globally an estimated 44% of people living with diabetes are undiagnosed. (<span class="citation" data-cites="diabetescare">Stafford et al. (<a href="#ref-diabetescare" role="doc-biblioref">2025</a>)</span>)</p>
-<p>In this project we try to predicted diabetes disease based on common health factors. A reliable model could help to prescreen people and recommend following up with a physician for people who are at risk. Given the large number of people living with undiagnosed diabetes this could potentially have a significant positive impact of world health.</p>
-<p>The analysis uses the American CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). (<span class="citation" data-cites="kagglediabetes">Dane and Teboul (<a href="#ref-kagglediabetes" role="doc-biblioref">2021</a>)</span>)</p>
+<p>In this project we try to predicted diabetes disease based on common health factors. A reliable model could help to prescreen people and recommend following up with a physician for people who are at risk. Given the large number of people living with undiagnosed diabetes this could potentially have a significant positive impact of world health. The target for our model with be the <code>diabetes</code> column from our dataset: (0 = no diabetes/pre-diabetes, 1 = diabetes).</p>
+<p>The analysis uses the American CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome. (<span class="citation" data-cites="kagglediabetes">Dane and Teboul (<a href="#ref-kagglediabetes" role="doc-biblioref">2021</a>)</span>)</p>
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
@@ -240,7 +240,7 @@ window.Quarto = {
 <section id="modeling-approach" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-approach">Modeling Approach</h3>
 <p>The data were split 70/30 into training and test sets with stratification on the target.<br>
-Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score because it is most important to not miss true positives.</p>
+Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score. In our dataset is fairly unballanced with the positive class making up about 14% of the data. Furthermore, we deem it to be a much large issue to miss true positive than to miss-identify negatives. This is why we have chosen to use f2-score: f2-score places twice as much emphasis on recall compared to precision.</p>
 <ol type="1">
 <li><p><strong>Decision Tree</strong> (class_weight=‘balanced’)<br>
 Hyperparameters: max_depth: {6,8,10,12,14}, min_samples_leaf: {175, 200, 225, 250}<br>
@@ -262,7 +262,7 @@ Hyperparameters: alpha: {1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4}<br>
 Table&nbsp;1: Scores for models.
 </figcaption>
 <div aria-describedby="tbl-model_scores-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="22">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="16">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 14%">
@@ -318,7 +318,7 @@ Table&nbsp;1: Scores for models.
 Table&nbsp;2: Description of the training data.
 </figcaption>
 <div aria-describedby="tbl-describe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="23">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="17">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 28%">
@@ -600,7 +600,7 @@ Table&nbsp;2: Description of the training data.
 Table&nbsp;3: First few rows of the training data as example observations.
 </figcaption>
 <div aria-describedby="tbl-head-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="24">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="18">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
@@ -802,7 +802,7 @@ Table&nbsp;3: First few rows of the training data as example observations.
 <div id="fig-count" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../results/figures/EDA_count.png" class="img-fluid figure-img" style="width:40.0%">
+<img src="../results/figures/EDA_count.png" class="img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Frequency bar graph of the labels.
@@ -826,7 +826,7 @@ Figure&nbsp;2: Frequency bar graphs of the binary features.
 <div id="fig-histogram" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../results/figures/EDA_histogram.png" class="img-fluid figure-img" style="width:80.0%">
+<img src="../results/figures/EDA_histogram.png" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Histograms of the non-binary numeric features.
@@ -869,7 +869,7 @@ Figure&nbsp;5: Feature-feature correlation plot of all features.
 <section id="model-fitting" class="level3">
 <h3 class="anchored" data-anchor-id="model-fitting">Model Fitting</h3>
 <p>The data were split 70/30 into training and test sets with stratification on the target.<br>
-Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score because it is most important to not miss true positives.</p>
+Two classifiers were trained and tuned using 5-fold cross-validated grid search with <strong>f2-score</strong> as the scoring metric. We chose to use f2-score. In our dataset is fairly unballanced with the positive class making up about 14% of the data. Furthermore, we deem it to be a much large issue to miss true positive than to miss-identify negatives. This is why we have chosen to use f2-score: f2-score places twice as much emphasis on recall compared to precision.</p>
 <ol type="1">
 <li><p><strong>Decision Tree</strong> (class_weight=‘balanced’)<br>
 Hyperparameters: max_depth: {6,8,10,12,14}, min_samples_leaf: {175, 200, 225, 250}<br>
@@ -893,7 +893,7 @@ Hyperparameters: alpha: {1e-3, 1e-2, 1e-1, 1e0, 1e1, 1e2, 1e3, 1e4}<br>
 Table&nbsp;4: Comparison of model performance metrics on the test set
 </figcaption>
 <div aria-describedby="tbl-performance-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="27">
+<div class="cell-output cell-output-display cell-output-markdown" data-execution_count="21">
 <table class="do-not-create-environment cell caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 14%">

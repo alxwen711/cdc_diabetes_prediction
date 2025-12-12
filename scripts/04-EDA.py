@@ -1,3 +1,11 @@
+"""Create the EDA plots for the CDC Diabetes Prediction Report.
+
+This script will load the training data created from 03-split_preprocess_data.py
+and create several visual plots and tables to be saved to the results folder for
+later report use. 
+"""
+
+
 import click
 import pandas as pd
 import altair as alt
@@ -85,8 +93,8 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
         y=alt.Y("count()", title="Count").stack(False),
         color=alt.Color("diabetes:N"),
     ).properties(
-        width=500,
-        height=150,
+        width=650,
+        height=130,
     ).facet(
         "feature:N",
         columns=1,
@@ -215,7 +223,7 @@ def eda_correlation(X_train):
     ).properties(
         width=600,
         height=600,
-        title="Correlation Heatmap"
+        title="Feature-Feature Correlation Heatmap"
     )
     return chart
 

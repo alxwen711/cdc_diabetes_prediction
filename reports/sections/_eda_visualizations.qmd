@@ -1,6 +1,6 @@
 
 
-![Frequency bar graph of the labels.](../results/figures/EDA_count.png){#fig-count width=40%}
+![Frequency bar graph of the labels.](../results/figures/EDA_count.png){#fig-count width=50%}
 
 
 For this supervised learning problem, all observations are labelled as either 0, indicating a negative label for no diabetes, or 1, indicating a positive label for either diabetes or pre-diabetes. From @fig-count, the class distribution is imbalanced with roughly 14% of observations labelled positive for diabetes. This motivates using F2 score as our metric; in this data, a false negative is more problematic than a false positive, thus recall rate is prioritized over precision rate. The exact equation for the F2 score used within model evaluation is as follows:
@@ -16,7 +16,7 @@ Continuing the EDA, @fig-binary displays the distribution of all binary features
 There is a significant variance in the distributions of the binary features; `Smoker` and `Sex` have similar number of observations where `f = 0` compared to `f = 1`, where as a feature like `Stroke` is heavily weighted to `f = 0`, indicating very few observations indicate they have had a stroke before. Due to the high number of observations in the dataset, even where there are imbalances, we can expect there to be enough observations with either a positive (`1`) or negative (`0`) value for any given binary feature that should prevent low sample size bias. `HighBP`, `HighChol`, and `Smoker` all have more observations with `f = 0` than `f = 1`, but in all of those features, the frequency of `f = 1, d = 1` labels exceed that of `f = 0, d = 1` labels, which indicate that we can expect that the model will indicate an association with these risks factors and a risk of diabetes. 
 
 
-![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=80%}
+![Histograms of the non-binary numeric features.](../results/figures/EDA_histogram.png){#fig-histogram width=100%}
 
 ![Boxplots of the non-binary numeric features.](../results/figures/EDA_boxplot.png){#fig-boxplot width=100%}
 
