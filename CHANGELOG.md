@@ -16,5 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - In the introduction defined target more clearly as per Milestone 1 TA feedback. (#72)
 - Results: add figure/table legends descriptions (TA feedback, general plot labelling cleanup, #73)
 - Include raw data files in the repository (peer feedback, #73)
+- Strengthen reasoning to better support claims in the report (peer review) (#75)
+- Enhance the explanation of methods and the rationale behind method selection (TA feedback) (#75)
 
 ### Removed
