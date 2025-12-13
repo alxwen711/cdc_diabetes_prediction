@@ -2,7 +2,14 @@
 
 This script will load the training data created from 03-split_preprocess_data.py
 and create several visual plots and tables to be saved to the results folder for
-later report use. 
+later report use. The following files in the report correspond to these functions:
+
+eda_describe -> results/tables/EDA_describe.csv, results/tables/EDA_head.csv, results/tables/EDA_tail.csv
+eda_count -> results/figures/EDA_count.png
+eda_histogram -> results/figures/EDA_histogram.png
+eda_binary -> results/figures/EDA_binary.png
+eda_boxplot -> results/figures/EDA_boxplot.png
+eda_correlation -> results/figures/EDA_correlation.png
 """
 
 
@@ -68,6 +75,7 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
     ).properties(title='Count of Diabetes vs Non-Diabetes Records in Dataset')
 
     return chart
+
 
 def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
     """
@@ -228,7 +236,6 @@ def eda_correlation(X_train):
     return chart
 
 
-
 def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figures"):
     """
     Saves a Altair Chart created from a previous EDA function to the given path under a specified name.
@@ -259,6 +266,7 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figure
 
     # Save Plot
     plot.save(os.path.join(filepath,filename))
+
 
 def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tables"):
     """
