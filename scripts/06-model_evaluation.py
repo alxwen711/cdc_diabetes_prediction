@@ -144,6 +144,7 @@ def plot_confusion_matrix(tree_model: object, X_test: pd.DataFrame, y_test: pd.S
         y_test,
         values_format="d",
     )
+    cm.ax_.set_title("Decision Tree Confusion Matrix")
     return cm.figure_
 
 def create_score_table(X_test: pd.DataFrame, y_test: pd.Series, 
@@ -262,7 +263,7 @@ def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tab
 )
 def main(x_test: str, y_test: str, model_dir: str, img_dir: str) -> None:
     """Model evaluation entrypoint — load test data and models for analysis."""
-    click.echo("Starting 04-evaluate_model.py — Model Evaluation & Visualisation\n")
+    click.echo("Starting 06-evaluate_model.py — Model Evaluation & Visualisation\n")
    
     # Load test data
     X_test, y_test = load_test_data(x_path=x_test, y_path=y_test)

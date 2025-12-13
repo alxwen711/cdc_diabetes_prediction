@@ -1,3 +1,18 @@
+"""Create the EDA plots for the CDC Diabetes Prediction Report.
+
+This script will load the training data created from 03-split_preprocess_data.py
+and create several visual plots and tables to be saved to the results folder for
+later report use. The following files in the report correspond to these functions:
+
+eda_describe -> results/tables/EDA_describe.csv, results/tables/EDA_head.csv, results/tables/EDA_tail.csv
+eda_count -> results/figures/EDA_count.png
+eda_histogram -> results/figures/EDA_histogram.png
+eda_binary -> results/figures/EDA_binary.png
+eda_boxplot -> results/figures/EDA_boxplot.png
+eda_correlation -> results/figures/EDA_correlation.png
+"""
+
+
 import click
 import pandas as pd
 import altair as alt
@@ -5,6 +20,9 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from src.generate_label import generate_label
+
+import warnings
+warnings.filterwarnings("ignore",category=pd.errors.SettingWithCopyWarning)
 
 # import script 03-split_preprocess_data.py to obtain training data
 preprocess_name = "03-split_preprocess_data"
@@ -24,40 +42,13 @@ def eda_describe(df: pd.DataFrame) -> list:
     List[pd.DataFrame]
     List of 3 dataframes consisting of the head, tail, and description of the DataFrame.
     
-    
     Examples
     --------
     >>> d = {'col1': [1, 2], 'col2': [3, 4]}
     >>> df = pd.DataFrame(data=d)
-    >>> eda_describe(df)
-    
-    
-       col1  col2
-    0     1     3
-    1     2     4
-
-
-       col1  col2
-    0     1     3
-    1     2     4
-
-
-               col1      col2
-    count  2.000000  2.000000
-    mean   1.500000  3.500000
-    std    0.707107  0.707107
-    min    1.000000  3.000000
-    25%    1.250000  3.250000
-    50%    1.500000  3.500000
-    75%    1.750000  3.750000
-    max    2.000000  4.000000
+    >>> eda_describe(df) 
     """
-    print("First few rows of the training data:")
-    print(df.head())
-    print("\nLast few rows of the training data:")
-    print(df.tail())
-    print("\nDescription of the training data:")
-    print(df.describe())
+
     return [df.head(), df.tail(), df.describe().round(4)] # avoid long decimals from messing up pdf format
     
 
@@ -85,6 +76,7 @@ def eda_count(y_train: pd.Series) -> alt.Chart:
 
     return chart
 
+
 def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
     """
     Creates a set of histograms of all non-binary features in the training data set.
@@ -109,8 +101,8 @@ def eda_histogram(X_train: pd.DataFrame) -> alt.Chart:
         y=alt.Y("count()", title="Count").stack(False),
         color=alt.Color("diabetes:N"),
     ).properties(
-        width=500,
-        height=150,
+        width=650,
+        height=130,
     ).facet(
         "feature:N",
         columns=1,
@@ -148,6 +140,8 @@ def eda_binary(X_train: pd.DataFrame) -> alt.Chart:
     df_sample_binary = df_long[df_long["feature"].isin(binary_features)]
     
     # reduce to counts of binary features
+
+
     df_sample_binary["label"] = df_sample_binary.apply(generate_label, axis = 1)
     df_sample_binary = df_sample_binary.value_counts().rename("count").reset_index()
     
@@ -237,10 +231,9 @@ def eda_correlation(X_train):
     ).properties(
         width=600,
         height=600,
-        title="Correlation Heatmap"
+        title="Feature-Feature Correlation Heatmap"
     )
     return chart
-
 
 
 def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figures"):
@@ -273,6 +266,7 @@ def save_figure(plot: alt.Chart, filename: str,  filepath: str = "results/figure
 
     # Save Plot
     plot.save(os.path.join(filepath,filename))
+
 
 def save_dataframe(df: pd.DataFrame, filename: str, filepath: str = "results/tables"):
     """

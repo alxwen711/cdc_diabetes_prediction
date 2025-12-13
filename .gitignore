@@ -1,4 +1,3 @@
 .DS_Store
-data/*
 environment-aarch64.yml
 conda-linux-aarch64.lock

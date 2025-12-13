@@ -8,11 +8,11 @@ Basic data analysis on predicting diabetes based on health and lifestyle feature
 
 ## About
 
-In this project we explored a decision tree model and naive bayes for predicting diabetes. After concluding that the decision tree is stronger in this context, We then utilized f2-score as our scoring function due to the context of our problem placing higher severity on false negatives rather than false positives for detecting diabetes.
+In this project we explored a decision tree model and naive bayes for predicting diabetes. After concluding that the decision tree is stronger in this context, we then utilized f2-score as our scoring function due to the context of our problem placing higher severity on false negatives rather than false positives for detecting diabetes.
 
 We conclude that the decision tree model was the best performing of the models tested, correctly detected 8309 of 10604 positive cases (recall rate is about 78%). This result does come at a fairly significant cost in terms of false positives (precision rate is about 29%) with 20054 false positives. Depending on the actual cost of false positive this may need significant improvement to be a viable screening model.
 
-The full report of our findings can be found [here](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/notebooks/cdc_diabetes_prediction_report.ipynb).
+The full report of our findings can be found [here](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/reports/cdc_diabetes_prediction_report.pdf).
 
 ## Dependencies
 
@@ -22,22 +22,27 @@ The full report of our findings can be found [here](https://github.com/alxwen711
 
 ## Usage
 
-### Setup
+### Setting up the Environment
 
-1. Clone this GitHub repo
+1. Clone this GitHub repo.
+2. Start Docker Desktop.
+3. In terminal navigate to the project root folder and run this command: `docker compose up`.
+4. In the terminal output for the above command look for a URL beginning with `http://127.0.0.1:8888/lab?token=`.
+5. Open the URL from step 4 in a browser.
 
-### Analysis
+### Running the Analysis
 
-1. Start Docker Desktop
-2. In terminal navigate to the project root folder and run this command: `docker compose up`
-3. In the terminal output for the above command look for a ULR beginning with `http://127.0.0.1:8888/lab?token=`
-4. Copy the above URL in its entirety
-5. Paste the URL into any web browser
-6. Run the analysis by opening `diabetes_predition/notebooks/cdc_diabetes_prediction_report.ipynb` and clicking Run > Run All Cells
+Once the Jupyter Docker Image can be accessed, follow these steps to run the analysis.
+
+1. Open the terminal in the Jupyter environment. 
+2. Navigate to the `diabetes_prediction` folder.
+3. Run the command `make clean` to remove residual files.
+4. Run the command `make all` to run all of the Python and Quarto scripts used to create the report.
+5. Navigate to `reports/cdc_diabetes_prediction_report.pdf` to view the report.
 
 ### Closing
 
-To safely close the docker container
+To safely close the docker container:
 
 1. In terminal press `Crtl+C`
 2. Once the container has stopped enter this terminal command to remove the container `docker-compose rm` type `y` to confirm
@@ -94,43 +99,13 @@ conda-lock -k explicit --file environment.yml -p linux-64
 docker-compose up
 ```
 
-7. Within the terminal, make sure you are in the diabetes_prediction directory. If you are not, please run: `cd diabetes_prediction`
-
-Then run the following scripts to create all necessary files in the `results` folder:
-
-```
-python scripts/01-download_extract.py
-
-python scripts/02-clean_transform.py
-
-python scripts/03-split_preprocess_data.py
-
-python scripts/04-EDA.py -c saveallcharts -p results/figures
-python scripts/04-EDA.py -c describe -p results/tables
-
-python scripts/05-model_fitting.py
-
-python scripts/06-model_evaluation.py
-```
-
-8. To ensure that the PDF format runs properly (avoiding a missing font issue documented in  [Issue #48](https://github.com/alxwen711/cdc_diabetes_prediction/issues/48#issue-3700114411)), run this command first to ensure the fonts can be loaded properly:
-
-```
-quarto install tinytex
-```
-
-9. Then use the following command to generate the report in both HTML and PDF format:
-```
-quarto render reports/cdc_diabetes_prediction_report.qmd
-```
-
 ### Running test suite
 
 To run the test suite start with by running `docker compose up` as above. Then run `pytest` in the project root directory. More details can be found in the [`tests`](tests) directory.
 
 ## References and Acknowledgements
 
-The dataset utilized is the CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). A cleaned version of this dataset has been prepared by Aex Teboul and be accessed through Kaggle under the [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data). Lastly, our project makes use of the `ucimlrepo` library to access the dataset more easily, further documentation for this tool is located at [https://github.com/uci-ml-repo/ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo).
+The dataset utilized is the CDC Behavioural Risk Factor Surveillance System (BRFSS) 2015 Diabetes Health Indicators dataset (UCI ID 891), containing 253,680 survey responses with 21 health-related features and a binary diabetes outcome (0 = no diabetes/pre-diabetes, 1 = diabetes). A cleaned version of this dataset has been prepared by Alex Teboul and be accessed through Kaggle under the [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/data). Lastly, our project makes use of the `ucimlrepo` library to access the dataset more easily, further documentation for this tool is located at [https://github.com/uci-ml-repo/ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo).
 
 The full list of references for the project can be found in the `References` section of the [CDC Diabetes Prediction report](https://github.com/alxwen711/cdc_diabetes_prediction/blob/main/notebooks/cdc_diabetes_prediction_report.ipynb)
 

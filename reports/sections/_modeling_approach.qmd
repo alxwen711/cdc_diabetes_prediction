@@ -4,7 +4,7 @@ import pandas as pd
 ```
 
 The data were split 70/30 into training and test sets with stratification on the target.  
-Two classifiers were trained and tuned using 5-fold cross-validated grid search with **f2-score** as the scoring metric. We chose to use f2-score because it is most important to not miss true positives.
+Two classifiers were trained and tuned using 5-fold cross-validated grid search with **f2-score** as the scoring metric. We chose to use f2-score. In our dataset is fairly unballanced with the positive class making up about 14% of the data. Furthermore, we deem it to be a much large issue to miss true positive than to miss-identify negatives. This is why we have chosen to use f2-score: f2-score places twice as much emphasis on recall compared to precision.
 
 ```{python}
 with open("../results/models/tree_model.pickle", 'rb') as f:

@@ -1,6 +1,6 @@
 services:
   analysis-env:
-    image:  meirikson/cdc_diabetes_prediction:3e06134
+    image:  meirikson/cdc_diabetes_prediction:4767fd0
     ports:
       - "8888:8888"
     volumes:
