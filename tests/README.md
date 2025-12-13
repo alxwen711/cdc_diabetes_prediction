@@ -2,7 +2,7 @@
 
 ## Running tests
 
-To run the test suite navigate to the project root directory and run the command `pytest tests/*`.
+To run the test suite navigate to the project root directory and run the command `pytest` or `pytest -v` for more verbose output.
 
 The following test files in this folder correlate directly to the function files in the `src` folder:
 
