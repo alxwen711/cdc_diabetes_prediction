@@ -11,7 +11,7 @@ The following test files in this folder correlate directly to the function files
 | fit_naive_bayes.py  | fit_naive_bayes_test.py    |
 | generate_label.py | generate_label_test.py     |
 | save_raw_data.py    | save_raw_data_test.py    |
-
+| load_test_data.py  |  load_test_data_test.py  |
 
 ## Test teardown
 
